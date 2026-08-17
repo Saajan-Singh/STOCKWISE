@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add Item Modal - Reorder Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#45474c",
+                        "outline-variant": "#c5c6cc",
+                        "inverse-primary": "#bfc7d7",
+                        "primary-container": "#1c2430",
+                        "outline": "#75777c",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#709377",
+                        "surface-dim": "#d4dae7",
+                        "secondary": "#8c4f00",
+                        "on-background": "#151c25",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#ffdcbf",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#2d1600",
+                        "secondary-container": "#fca956",
+                        "on-tertiary-fixed-variant": "#2e4e37",
+                        "surface-tint": "#575f6d",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#abcfb1",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed": "#01210e",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-container": "#838b9a",
+                        "inverse-surface": "#2a313b",
+                        "tertiary": "#001105",
+                        "primary-fixed-dim": "#bfc7d7",
+                        "surface-container-highest": "#dce3f0",
+                        "on-secondary-container": "#713f00",
+                        "on-surface": "#151c25",
+                        "primary": "#060e1a",
+                        "tertiary-fixed": "#c7eccc",
+                        "surface-container-low": "#eef4ff",
+                        "on-primary-fixed": "#141c28",
+                        "secondary-fixed-dim": "#ffb874",
+                        "on-primary-fixed-variant": "#3f4754",
+                        "tertiary-container": "#082915",
+                        "surface-container": "#e7eefb",
+                        "inverse-on-surface": "#eaf1fe",
+                        "on-secondary-fixed-variant": "#6b3b00",
+                        "primary-fixed": "#dbe3f3",
+                        "surface-variant": "#dce3f0",
+                        "surface-container-high": "#e2e8f5",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "background": "#f8f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "data-mono": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom UI Elements based on Design Guidelines */
+        .industrial-border {
+            border: 2px solid theme('colors.primary');
+        }
+        
+        .industrial-input {
+            border: 2px solid theme('colors.primary');
+            background-color: theme('colors.surface-container-lowest');
+            transition: all 0.2s ease;
+        }
+        
+        .industrial-input:focus {
+            outline: none;
+            border-width: 3px;
+        }
+        
+        .industrial-btn-primary {
+            background-color: theme('colors.secondary-container');
+            border: 2px solid theme('colors.primary');
+            color: theme('colors.primary');
+            transition: transform 0.1s ease;
+        }
+        
+        .industrial-btn-primary:active {
+            transform: translate(2px, 2px);
+        }
+        
+        .industrial-shadow {
+            box-shadow: 4px 4px 0 theme('colors.primary');
+        }
+        
+        /* Modal specific layout */
+        .modal-overlay {
+            background-color: rgba(6, 14, 26, 0.7); /* Primary color with opacity */
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen font-body-md text-on-surface antialiased flex items-center justify-center p-4">
+<!-- Modal Overlay -->
+<div class="fixed inset-0 modal-overlay z-40 flex items-center justify-center p-4">
+<!-- Modal Container -->
+<div class="bg-[#F6F4EF] industrial-border industrial-shadow w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col z-50">
+<!-- Modal Header -->
+<div class="border-b-2 border-primary px-6 py-4 flex justify-between items-center bg-surface-container-lowest sticky top-0 z-10">
+<h2 class="font-headline-lg text-headline-lg text-primary uppercase tracking-tight">Add New Item</h2>
+<button aria-label="Close modal" class="text-on-surface-variant hover:text-primary transition-colors p-2">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+</div>
+<!-- Modal Body (Two Column Grid) -->
+<div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-gutter">
+<!-- Section 1: Item Details -->
+<div class="flex flex-col gap-6">
+<div class="border-b-[1px] border-primary pb-2 mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">ITEM DETAILS</h3>
+</div>
+<!-- Input Group: Name -->
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-label-caps text-primary uppercase tracking-wider" for="item-name">Product Name</label>
+<input class="industrial-input p-3 font-body-md text-body-md w-full" id="item-name" placeholder="e.g. Heavy Duty Pallet Jack" type="text"/>
+</div>
+<!-- Input Group: SKU -->
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-label-caps text-primary uppercase tracking-wider" for="item-sku">SKU / Identifier</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">tag</span>
+<input class="industrial-input p-3 pl-10 font-data-mono text-data-mono w-full uppercase" id="item-sku" placeholder="WRH-001" type="text"/>
+</div>
+</div>
+<!-- Input Group: Category -->
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-label-caps text-primary uppercase tracking-wider" for="item-category">Category</label>
+<div class="relative">
+<select class="industrial-input p-3 font-body-md text-body-md w-full appearance-none bg-surface-container-lowest rounded-none" id="item-category">
+<option disabled="" selected="" value="">Select category...</option>
+<option value="equipment">Equipment</option>
+<option value="packaging">Packaging</option>
+<option value="raw-materials">Raw Materials</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none">arrow_drop_down</span>
+</div>
+</div>
+</div>
+<!-- Section 2: Reorder Settings -->
+<div class="flex flex-col gap-6">
+<div class="border-b-[1px] border-primary pb-2 mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">REORDER SETTINGS</h3>
+</div>
+<!-- Input Group: Starting Stock -->
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-label-caps text-primary uppercase tracking-wider" for="starting-stock">Starting Stock</label>
+<div class="flex industrial-border bg-surface-container-lowest w-fit">
+<button class="p-3 border-r-2 border-primary hover:bg-surface-variant transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<input class="w-24 text-center font-data-mono text-data-mono p-3 border-none focus:ring-0 bg-transparent" id="starting-stock" type="number" value="0"/>
+<button class="p-3 border-l-2 border-primary hover:bg-surface-variant transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<!-- Input Group: Lead Time -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<label class="font-label-caps text-label-caps text-primary uppercase tracking-wider" for="lead-time">Lead Time (Days)</label>
+<div class="group relative flex items-center justify-center cursor-help">
+<span class="material-symbols-outlined text-[18px] text-secondary-container icon-fill">info</span>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-primary text-on-primary font-body-md text-[12px] leading-tight rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none z-10 text-center">
+                                    Expected time from order placement to delivery.
+                                </div>
+</div>
+</div>
+<input class="industrial-input p-3 font-data-mono text-data-mono w-full max-w-[200px]" id="lead-time" min="0" placeholder="14" type="number"/>
+</div>
+<!-- Input Group: Safety Stock -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<label class="font-label-caps text-label-caps text-primary uppercase tracking-wider" for="safety-stock">Safety Stock Level</label>
+<div class="group relative flex items-center justify-center cursor-help">
+<span class="material-symbols-outlined text-[18px] text-secondary-container icon-fill">info</span>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-primary text-on-primary font-body-md text-[12px] leading-tight rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none z-10 text-center">
+                                    Minimum inventory level before reorder is triggered.
+                                </div>
+</div>
+</div>
+<input class="industrial-input p-3 font-data-mono text-data-mono w-full max-w-[200px]" id="safety-stock" min="0" placeholder="50" type="number"/>
+</div>
+</div>
+</div>
+<!-- Modal Footer (Actions) -->
+<div class="border-t-2 border-primary px-8 py-6 bg-surface-container-lowest flex flex-col-reverse sm:flex-row justify-end items-center gap-4 mt-auto">
+<button class="w-full sm:w-auto px-6 py-3 font-label-caps text-label-caps uppercase text-primary border-2 border-transparent hover:border-primary transition-all">
+                    Cancel
+                </button>
+<button class="w-full sm:w-auto px-8 py-3 font-label-caps text-label-caps uppercase industrial-btn-primary flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add_box</span>
+                    Add Item
+                </button>
+</div>
+</div>
+</div>
+</body></html>

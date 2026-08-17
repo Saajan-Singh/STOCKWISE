@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="StockWise — Know what to reorder before you run out. Calculate your reorder point based on real demand patterns. Maintain optimal safety stock without tying up cash in dead inventory." />
+  <title>StockWise — Inventory Reorder Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="stylesheet" href="css/landing.css" />
+</head>
+<body>
+
+
+       <!-- TOP NAVIGATION BAR -->
+
+  <nav id="main-nav" class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar__brand">
+      <span class="material-symbols-outlined navbar__icon" aria-hidden="true">widgets</span>
+      <span class="navbar__wordmark">STOCKWISE</span>
+    </div>
+
+    <div class="navbar__links" id="nav-links">
+      <a class="nav-link nav-link--active" href="#features" id="nav-features">FEATURES</a>
+      <a class="nav-link" href="#how-it-works" id="nav-how">HOW IT WORKS</a>
+      <a class="nav-link" href="#pricing" id="nav-pricing">PRICING</a>
+      <a class="nav-link" href="#faq" id="nav-faq">FAQ</a>
+    </div>
+
+    <div class="navbar__actions">
+      <button class="btn btn--ghost" id="btn-login" type="button">LOG IN</button>
+      <button class="btn btn--primary-action" id="btn-signup" type="button">SIGN UP</button>
+    </div>
+
+    <button class="navbar__hamburger" id="hamburger-btn" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+    </button>
+  </nav>
+
+  <main class="main-content">
+
+         <!-- HERO SECTION -->
+
+    <section class="hero grid-bg" id="hero">
+      <div class="hero__container">
+
+        <!-- Left: Copy -->
+        <div class="hero__copy">
+          <div class="badge badge--amber">DEMAND-BASED LOGISTICS</div>
+          <h1 class="hero__headline">Know What To Reorder Before You Run Out</h1>
+          <p class="hero__subtext">
+            Stop guessing. We calculate your reorder point based on real demand
+            patterns. Maintain optimal safety stock without tying up cash in
+            dead inventory.
+          </p>
+          <div class="hero__ctas">
+            <button class="btn btn--cta-primary" id="hero-cta-primary" type="button">
+              GET STARTED FREE
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+            </button>
+            <button class="btn btn--cta-secondary" id="hero-cta-secondary" type="button">
+              SEE HOW IT WORKS
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Active Inventory Widget -->
+        <div class="inventory-widget" role="region" aria-label="Active Inventory preview">
+          <div class="inventory-widget__header">
+            <span class="label-caps">ACTIVE INVENTORY</span>
+            <span class="material-symbols-outlined" aria-hidden="true">more_horiz</span>
+          </div>
+
+          <div class="inventory-widget__rows">
+            <!-- Row 1 — Critical -->
+            <div class="inventory-row inventory-row--critical">
+              <div class="inventory-row__info">
+                <span class="inventory-row__sku">SKU-A892</span>
+                <span class="inventory-row__name">Industrial Bearings</span>
+              </div>
+              <div class="inventory-row__status-area">
+                <div class="stock-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="25% stock remaining">
+                  <div class="stock-bar__fill stock-bar__fill--critical" data-width="25"></div>
+                </div>
+                <span class="status-badge status-badge--critical">CRITICAL</span>
+              </div>
+            </div>
+
+            <!-- Row 2 — Reorder -->
+            <div class="inventory-row inventory-row--reorder">
+              <div class="inventory-row__info">
+                <span class="inventory-row__sku">SKU-B441</span>
+                <span class="inventory-row__name">Hydraulic Fluid (5G)</span>
+              </div>
+              <div class="inventory-row__status-area">
+                <div class="stock-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="50% stock remaining">
+                  <div class="stock-bar__fill stock-bar__fill--reorder" data-width="50"></div>
+                </div>
+                <span class="status-badge status-badge--reorder">REORDER</span>
+              </div>
+            </div>
+
+            <!-- Row 3 — Healthy -->
+            <div class="inventory-row">
+              <div class="inventory-row__info">
+                <span class="inventory-row__sku">SKU-C990</span>
+                <span class="inventory-row__name">Safety Goggles</span>
+              </div>
+              <div class="inventory-row__status-area">
+                <div class="stock-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="75% stock remaining">
+                  <div class="stock-bar__fill stock-bar__fill--healthy" data-width="75"></div>
+                </div>
+                <span class="status-badge status-badge--healthy">HEALTHY</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+         <!-- STATS BAND -->
+
+    <section class="stats-band" aria-label="Key statistics">
+      <div class="stats-band__container">
+        <div class="stat-item">
+          <span class="stat-item__number">10,000+</span>
+          <span class="stat-item__label">SKUs TRACKED</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-item__number">99.2%</span>
+          <span class="stat-item__label">STOCKOUT ACCURACY</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-item__number">3 Min</span>
+          <span class="stat-item__label">SETUP</span>
+        </div>
+      </div>
+    </section>
+
+         <!-- FEATURES SECTION — Shipping Manifest -->
+
+         <section class="features grid-bg" id="features">
+      <div class="features__container">
+        <div class="features__header">
+          <span class="badge badge--amber-outline">WHAT'S INSIDE</span>
+          <h2 class="features__headline">Built For How Small Businesses Actually Sell.</h2>
+        </div>
+
+        <!-- Kraft-paper manifest card -->
+        <div class="manifest-card perforated-top">
+          <div class="manifest-card__header">
+            <div class="manifest-card__title-group">
+              <h3 class="manifest-card__title">SHIPPING MANIFEST</h3>
+              <p class="manifest-card__docno">DOC. NO. 492-B // STOCKWISE</p>
+            </div>
+            <div class="manifest-card__qty">QTY: 03</div>
+          </div>
+
+          <!-- Item 1 -->
+          <article class="manifest-item">
+            <div class="manifest-item__left">
+              <span class="material-symbols-outlined manifest-item__check" aria-hidden="true">check_box</span>
+              <div class="manifest-item__details">
+                <div class="manifest-item__title-row">
+                  <span class="manifest-item__number">ITEM-01</span>
+                  <h4 class="manifest-item__name">Real Demand Forecasting</h4>
+                </div>
+                <p class="manifest-item__desc">Automatically analyze historical sales data to predict future needs.</p>
+              </div>
+            </div>
+            <div class="manifest-item__stamp manifest-item__stamp--rot-pos" aria-label="Verified">VERIFIED</div>
+          </article>
+
+          <!-- Item 2 -->
+          <article class="manifest-item">
+            <div class="manifest-item__left">
+              <span class="material-symbols-outlined manifest-item__check" aria-hidden="true">check_box</span>
+              <div class="manifest-item__details">
+                <div class="manifest-item__title-row">
+                  <span class="manifest-item__number">ITEM-02</span>
+                  <h4 class="manifest-item__name">Smart Safety Stock</h4>
+                </div>
+                <p class="manifest-item__desc">Keep enough buffer without tying up cash in dead inventory.</p>
+              </div>
+            </div>
+            <div class="manifest-item__stamp manifest-item__stamp--rot-neg" aria-label="Verified">VERIFIED</div>
+          </article>
+
+          <!-- Item 3 -->
+          <article class="manifest-item manifest-item--last">
+            <div class="manifest-item__left">
+              <span class="material-symbols-outlined manifest-item__check" aria-hidden="true">check_box</span>
+              <div class="manifest-item__details">
+                <div class="manifest-item__title-row">
+                  <span class="manifest-item__number">ITEM-03</span>
+                  <h4 class="manifest-item__name">Critical Stock Alerts</h4>
+                </div>
+                <p class="manifest-item__desc">Get notified immediately when items hit their reorder point.</p>
+              </div>
+            </div>
+            <div class="manifest-item__stamp manifest-item__stamp--rot-sm" aria-label="Verified">VERIFIED</div>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+         <!-- HOW IT WORKS — Shipping Route Map -->
+
+         <section class="how-it-works paper-bg" id="how-it-works">
+      <div class="how-it-works__container">
+        <h2 class="section-headline">How It Works</h2>
+
+        <div class="route-map">
+          <!-- Animated SVG path -->
+          <svg class="route-map__svg" viewBox="0 0 1000 560" preserveAspectRatio="none" aria-hidden="true">
+            <path class="route-line" d="M 200 60 L 800 240 L 200 440" fill="none" stroke="var(--ink-navy)" stroke-width="4" />
+          </svg>
+
+          <!-- Step 1 — Left top -->
+          <div class="route-step route-step--left route-step--top">
+            <div class="route-step__card">
+              <div class="route-step__icon-node" aria-hidden="true">
+                <span class="material-symbols-outlined">local_shipping</span>
+              </div>
+              <div class="route-step__header">
+                <span class="route-step__number">01</span>
+                <h3 class="route-step__title">Log Your Sales</h3>
+              </div>
+              <p class="route-step__desc">Input your historical and current sales data.</p>
+            </div>
+          </div>
+
+          <!-- Step 2 — Right middle -->
+          <div class="route-step route-step--right route-step--mid">
+            <div class="route-step__card">
+              <div class="route-step__icon-node route-step__icon-node--left" aria-hidden="true">
+                <span class="material-symbols-outlined">inventory</span>
+              </div>
+              <div class="route-step__header">
+                <span class="route-step__number">02</span>
+                <h3 class="route-step__title">Calculate Reorder Point</h3>
+              </div>
+              <p class="route-step__desc">Our system determines exactly when you need more stock.</p>
+            </div>
+          </div>
+
+          <!-- Step 3 — Left bottom -->
+          <div class="route-step route-step--left route-step--bottom">
+            <div class="route-step__card">
+              <div class="route-step__icon-node" aria-hidden="true">
+                <span class="material-symbols-outlined">warning</span>
+              </div>
+              <div class="route-step__header">
+                <span class="route-step__number">03</span>
+                <h3 class="route-step__title">Get Flagged</h3>
+              </div>
+              <p class="route-step__desc">Receive alerts before your inventory hits zero.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+         <!-- TESTIMONIAL — Packing Slip -->
+
+         <section class="testimonial grid-bg">
+      <div class="testimonial__container">
+        <div class="packing-slip">
+          <!-- Staple graphic -->
+          <div class="packing-slip__staple" aria-hidden="true"></div>
+
+          <div class="packing-slip__header">
+            <span class="packing-slip__label">PACKING SLIP / TESTIMONIAL</span>
+            <div class="packing-slip__meta">
+              <span class="mono-text">DATE: 2024-10-24</span>
+              <span class="mono-text">TRACKING: 1Z99999999</span>
+            </div>
+          </div>
+
+          <blockquote class="packing-slip__quote">
+            "Since switching to StockWise, we haven't had a single out-of-stock
+            event on our critical components. It's like having a full-time logistics
+            manager on staff, but for a fraction of the cost."
+          </blockquote>
+
+          <div class="packing-slip__author">
+            <span class="material-symbols-outlined packing-slip__avatar" aria-hidden="true">person</span>
+            <div class="packing-slip__author-info">
+              <span class="packing-slip__author-name">JOHN DOE</span>
+              <span class="packing-slip__author-company">JD MANUFACTURING</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+         <!-- PRICING SECTION -->
+
+       <section class="pricing paper-bg" id="pricing">
+      <div class="pricing__container">
+        <h2 class="section-headline">Pricing Plans</h2>
+
+        <div class="pricing__cards">
+
+          <!-- Free Plan -->
+          <div class="pricing-card pricing-card--free">
+            <h3 class="pricing-card__plan">Free</h3>
+            <p class="pricing-card__description">Perfect for getting started and testing the waters.</p>
+            <div class="pricing-card__price">
+              <span class="pricing-card__amount">$0</span>
+              <span class="pricing-card__period">/mo</span>
+            </div>
+            <div class="pricing-card__divider"></div>
+            <ul class="pricing-card__features" role="list">
+              <li class="pricing-feature">
+                <span class="pricing-feature__check" aria-hidden="true">[X]</span>
+                Up to 25 Items
+              </li>
+              <li class="pricing-feature">
+                <span class="pricing-feature__check" aria-hidden="true">[X]</span>
+                Basic Forecasting
+              </li>
+              <li class="pricing-feature">
+                <span class="pricing-feature__check" aria-hidden="true">[X]</span>
+                Email Alerts
+              </li>
+            </ul>
+            <button class="btn btn--pricing-ghost" id="btn-free-plan" type="button">GET STARTED</button>
+          </div>
+
+          <!-- Pro Plan -->
+          <div class="pricing-card pricing-card--pro die-cut">
+            <div class="pricing-card__recommended" aria-label="Recommended plan">RECOMMENDED</div>
+            <h3 class="pricing-card__plan pricing-card__plan--pro">Pro</h3>
+            <p class="pricing-card__description">For growing businesses with complex inventory needs.</p>
+            <div class="pricing-card__price">
+              <span class="pricing-card__amount pricing-card__amount--pro">$49</span>
+              <span class="pricing-card__period">/mo</span>
+            </div>
+            <div class="pricing-card__divider"></div>
+            <ul class="pricing-card__features pricing-card__features--lg" role="list">
+              <li class="pricing-feature pricing-feature--lg">
+                <span class="pricing-feature__check pricing-feature__check--lg" aria-hidden="true">[X]</span>
+                Unlimited Items
+              </li>
+              <li class="pricing-feature pricing-feature--lg">
+                <span class="pricing-feature__check pricing-feature__check--lg" aria-hidden="true">[X]</span>
+                Advanced Forecasting
+              </li>
+              <li class="pricing-feature pricing-feature--lg">
+                <span class="pricing-feature__check pricing-feature__check--lg" aria-hidden="true">[X]</span>
+                SMS &amp; Email Alerts
+              </li>
+              <li class="pricing-feature pricing-feature--lg">
+                <span class="pricing-feature__check pricing-feature__check--lg" aria-hidden="true">[X]</span>
+                API Access
+              </li>
+            </ul>
+            <button class="btn btn--pricing-amber" id="btn-pro-plan" type="button">UPGRADE TO PRO</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+         <!-- FAQ SECTION — Filing Index Layout -->
+
+    <section class="faq grid-bg" id="faq">
+      <div class="faq__container">
+        <h2 class="section-headline">Frequently Asked Questions</h2>
+
+        <div class="faq__layout">
+
+          <!-- Left: Tab list -->
+          <nav class="faq__tabs" role="tablist" aria-label="FAQ categories">
+            <button
+              class="faq-tab faq-tab--active"
+              id="faq-tab-0"
+              role="tab"
+              aria-selected="true"
+              aria-controls="faq-panel"
+              type="button"
+              data-faq="0"
+            >
+              Is my sales data private?
+              <div class="faq-tab__arrow" aria-hidden="true"></div>
+            </button>
+            <button
+              class="faq-tab"
+              id="faq-tab-1"
+              role="tab"
+              aria-selected="false"
+              aria-controls="faq-panel"
+              type="button"
+              data-faq="1"
+            >
+              Do I need accounting experience?
+            </button>
+            <button
+              class="faq-tab"
+              id="faq-tab-2"
+              role="tab"
+              aria-selected="false"
+              aria-controls="faq-panel"
+              type="button"
+              data-faq="2"
+            >
+              Can I import existing sales history?
+            </button>
+            <button
+              class="faq-tab"
+              id="faq-tab-3"
+              role="tab"
+              aria-selected="false"
+              aria-controls="faq-panel"
+              type="button"
+              data-faq="3"
+            >
+              How are alerts sent?
+            </button>
+          </nav>
+
+          <!-- Right: Answer panel -->
+          <div class="faq__panel kraft-texture" id="faq-panel" role="tabpanel">
+            <div class="faq__panel-ref" id="faq-panel-ref">REF: FAQ-001 // DATA PRIVACY</div>
+            <h3 class="faq__panel-question" id="faq-panel-question">Is my sales data private?</h3>
+            <p class="faq__panel-answer" id="faq-panel-answer">
+              Absolutely. Your data is encrypted and never shared with third parties.
+              We use it solely to generate your forecasts.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+         <!-- FINAL CTA BANNER -->
+
+    <section class="final-cta ink-navy" id="final-cta">
+      <div class="final-cta__container">
+        <div class="final-cta__copy">
+          <h2 class="final-cta__headline">
+            Stop Guessing.<br />
+            Start Tracking.
+          </h2>
+          <p class="final-cta__status">STATUS: AWAITING DEPLOYMENT</p>
+        </div>
+        <div class="final-cta__action">
+          <button class="btn btn--cta-amber" id="final-cta-btn" type="button">
+            GET STARTED FREE
+          </button>
+        </div>
+      </div>
+
+      <!-- Decorative circular seal -->
+      <div class="cta-seal" aria-hidden="true">
+        <div class="cta-seal__inner">
+          <span class="cta-seal__text">CLEARED<br />FOR<br />SHIPMENT</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+       <!-- FOOTER -->
+        
+  <footer class="footer ink-navy" role="contentinfo">
+    <div class="footer__container">
+      <div class="footer__brand">
+        <span class="material-symbols-outlined footer__icon" aria-hidden="true">widgets</span>
+        <span class="footer__wordmark">STOCKWISE</span>
+      </div>
+      <nav class="footer__nav" aria-label="Footer navigation">
+        <a class="footer__link" href="#">Privacy</a>
+        <a class="footer__link" href="#">Terms</a>
+        <a class="footer__link" href="#">Contact</a>
+        <span class="footer__copy">&copy; 2024 StockWise</span>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/landing.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>REQUEST ACCESS - REORDER TRACKER</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#dce3f0",
+                    "surface-tint": "#575f6d",
+                    "surface-dim": "#d4dae7",
+                    "secondary": "#8c4f00",
+                    "on-background": "#151c25",
+                    "background": "#f8f9ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#e2e8f5",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#151c25",
+                    "inverse-primary": "#bfc7d7",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#fca956",
+                    "on-tertiary-fixed-variant": "#2e4e37",
+                    "tertiary-fixed": "#c7eccc",
+                    "inverse-on-surface": "#eaf1fe",
+                    "on-tertiary-container": "#709377",
+                    "on-surface-variant": "#45474c",
+                    "on-error-container": "#93000a",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#838b9a",
+                    "surface-container-highest": "#dce3f0",
+                    "surface-container-low": "#eef4ff",
+                    "outline": "#75777c",
+                    "tertiary-fixed-dim": "#abcfb1",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed-variant": "#6b3b00",
+                    "outline-variant": "#c5c6cc",
+                    "inverse-surface": "#2a313b",
+                    "on-primary-fixed": "#141c28",
+                    "primary": "#060e1a",
+                    "primary-fixed": "#dbe3f3",
+                    "surface-container": "#e7eefb",
+                    "tertiary": "#001105",
+                    "on-secondary-container": "#713f00",
+                    "surface": "#f8f9ff",
+                    "primary-container": "#1c2430",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed": "#2d1600",
+                    "tertiary-container": "#082915",
+                    "primary-fixed-dim": "#bfc7d7",
+                    "secondary-fixed": "#ffdcbf",
+                    "surface-bright": "#f8f9ff",
+                    "on-primary-fixed-variant": "#3f4754",
+                    "secondary-fixed-dim": "#ffb874",
+                    "on-tertiary-fixed": "#01210e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "stack-sm": "8px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "stack-lg": "32px",
+                    "margin-desktop": "32px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "display-lg": [
+                            "Space Grotesk"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "data-mono": [
+                            "JetBrains Mono"
+                    ],
+                    "label-caps": [
+                            "Space Grotesk"
+                    ],
+                    "headline-lg-mobile": [
+                            "Space Grotesk"
+                    ],
+                    "headline-lg": [
+                            "Space Grotesk"
+                    ],
+                    "headline-md": [
+                            "Space Grotesk"
+                    ]
+            },
+            "fontSize": {
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "data-mono": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        /* Custom styles for Kraft paper and Grid background */
+        .bg-kraft {
+            background-color: #F6F4EF;
+        }
+        .bg-dot-grid {
+            background-image: radial-gradient(rgba(21, 28, 37, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .text-amber-solid {
+            color: #C77D2E;
+        }
+        .bg-amber-solid {
+            background-color: #C77D2E;
+        }
+        
+        /* Input and Focus Styles */
+        input:focus, select:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        /* Number input hide arrows */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        
+        /* Tooltip */
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            background-color: #151c25;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            width: max-content;
+            max-width: 200px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #151c25 transparent transparent transparent;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-high h-full font-body-md text-on-surface bg-dot-grid flex items-center justify-center p-margin-mobile md:p-margin-desktop antialiased">
+<!-- Suppress Nav Bars as this is a Transactional/Linear Sign Up Screen -->
+<main class="w-full max-w-4xl bg-kraft border-[2px] border-primary relative shadow-[4px_4px_0px_0px_rgba(6,14,26,1)] flex flex-col min-h-[600px]">
+<!-- Header -->
+<header class="border-b-[2px] border-primary p-margin-desktop flex flex-col md:flex-row md:items-end md:justify-between gap-stack-sm bg-surface-container-lowest"><div class="w-full flex flex-col items-center justify-center space-y-stack-sm text-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">ACCESS TERMINAL</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1; font-size: 32px;">inventory_2</span>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase tracking-tight">REORDER TRACKER</h1>
+</div>
+<h2 class="font-headline-md text-primary uppercase mt-2">REQUEST ACCESS</h2>
+</div></header>
+<!-- Form Area -->
+<form class="p-margin-desktop flex-grow flex flex-col md:grid md:grid-cols-2 gap-x-gutter gap-y-stack-lg">
+<!-- Left Column: YOUR DETAILS -->
+<div class="flex flex-col gap-stack-md">
+<h2 class="font-label-caps text-label-caps text-primary border-b-[1px] border-outline pb-2 mb-2 uppercase">YOUR DETAILS</h2>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-primary" for="fullName">Full Name</label>
+<input class="bg-surface-container-lowest border-[2px] border-primary focus:border-[3px] p-2 font-body-md text-on-surface transition-all h-[44px]" id="fullName" placeholder="JOHN DOE" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-primary" for="workEmail">Work Email</label>
+<input class="bg-surface-container-lowest border-[2px] border-primary focus:border-[3px] p-2 font-body-md text-on-surface transition-all h-[44px]" id="workEmail" placeholder="john@company.com" required="" type="email"/>
+</div>
+</div>
+<!-- Right Column: BUSINESS DETAILS -->
+<div class="flex flex-col gap-stack-md mt-stack-lg md:mt-0">
+<h2 class="font-label-caps text-label-caps text-primary border-b-[1px] border-outline pb-2 mb-2 uppercase">BUSINESS DETAILS</h2>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<label class="font-label-caps text-label-caps text-primary" for="businessName">Business Name</label>
+<div class="tooltip relative inline-flex">
+<span class="material-symbols-outlined text-[16px] text-amber-solid cursor-help" style="font-variation-settings: 'FILL' 1;">info</span>
+<span class="tooltip-text font-body-md">This becomes your warehouse workspace name</span>
+</div>
+</div>
+<input class="bg-surface-container-lowest border-[2px] border-primary focus:border-[3px] p-2 font-body-md text-on-surface transition-all h-[44px]" id="businessName" placeholder="ACME LOGISTICS" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-primary" for="role">Role</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border-[2px] border-primary focus:border-[3px] p-2 font-body-md text-on-surface appearance-none transition-all h-[44px] cursor-pointer" id="role" required="">
+<option disabled="" selected="" value="">Select Role</option>
+<option value="manager">Warehouse Manager</option>
+<option value="operator">Floor Operator</option>
+<option value="admin">System Admin</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-primary">arrow_drop_down</span>
+</div>
+</div>
+</div>
+<!-- Footer Actions (Spans both columns on desktop) -->
+<div class="md:col-span-2 flex flex-col gap-1 mt-stack-md">
+<label class="font-label-caps text-label-caps text-primary flex items-center gap-1" for="password">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+Password
+</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-[2px] border-primary focus:border-[3px] p-2 pr-10 font-body-md text-on-surface transition-all h-[44px]" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined" id="visibilityIcon">visibility_off</span>
+</button>
+</div>
+</div><div class="md:col-span-2 flex flex-col items-center gap-stack-md mt-stack-md pt-stack-md border-t-[1px] border-outline">
+<button class="w-full md:w-auto min-w-[200px] bg-amber-solid border-[2px] border-primary font-label-caps text-label-caps text-primary py-3 px-6 uppercase tracking-widest hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none shadow-[2px_2px_0px_0px_rgba(6,14,26,1)] transition-all flex items-center justify-center gap-2" type="submit">
+                    REQUEST ACCESS
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<a class="font-body-md text-amber-solid hover:underline decoration-2 underline-offset-4" href="#">Already have access? Log In</a>
+</div>
+</form>
+<!-- Decorative Bottom Strip -->
+<div class="absolute bottom-0 left-0 w-full h-2 flex">
+<div class="h-full bg-tertiary-fixed flex-[1]"></div>
+<div class="h-full bg-amber-solid flex-[2]"></div>
+<div class="h-full bg-error flex-[1]"></div>
+</div>
+</main>
+<script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const visibilityIcon = document.getElementById('visibilityIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                visibilityIcon.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                visibilityIcon.textContent = 'visibility_off';
+            }
+        }
+
+        function updateTeamSize(change) {
+            const input = document.getElementById('teamSize');
+            let currentValue = parseInt(input.value) || 1;
+            let newValue = currentValue + change;
+            
+            if (newValue < 1) newValue = 1;
+            if (newValue > 999) newValue = 999;
+            
+            input.value = newValue;
+        }
+    </script>
+</body></html>

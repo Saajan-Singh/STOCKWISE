@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reorder Tracker Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface-variant": "#45474c",
+                        "outline-variant": "#c5c6cc",
+                        "inverse-primary": "#bfc7d7",
+                        "primary-container": "#1c2430",
+                        "outline": "#75777c",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#709377",
+                        "surface-dim": "#d4dae7",
+                        "secondary": "#8c4f00",
+                        "on-background": "#151c25",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#ffdcbf",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#2d1600",
+                        "secondary-container": "#fca956",
+                        "on-tertiary-fixed-variant": "#2e4e37",
+                        "surface-tint": "#575f6d",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#abcfb1",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed": "#01210e",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-container": "#838b9a",
+                        "inverse-surface": "#2a313b",
+                        "tertiary": "#001105",
+                        "primary-fixed-dim": "#bfc7d7",
+                        "surface-container-highest": "#dce3f0",
+                        "on-secondary-container": "#713f00",
+                        "on-surface": "#151c25",
+                        "primary": "#060e1a",
+                        "tertiary-fixed": "#c7eccc",
+                        "surface-container-low": "#eef4ff",
+                        "on-primary-fixed": "#141c28",
+                        "secondary-fixed-dim": "#ffb874",
+                        "on-primary-fixed-variant": "#3f4754",
+                        "tertiary-container": "#082915",
+                        "surface-container": "#e7eefb",
+                        "inverse-on-surface": "#eaf1fe",
+                        "on-secondary-fixed-variant": "#6b3b00",
+                        "primary-fixed": "#dbe3f3",
+                        "surface-variant": "#dce3f0",
+                        "surface-container-high": "#e2e8f5",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "background": "#f8f9ff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "margin-desktop": "32px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "stack-lg": "32px"
+                    },
+                    fontFamily: {
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "data-mono": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "body-md": ["Inter"]
+                    },
+                    fontSize: {
+                        "body-lg": ["18px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "label-caps": ["12px", { lineHeight: "1", letterSpacing: "0.05em", fontWeight: "700" }],
+                        "headline-md": ["20px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "data-mono": ["14px", { lineHeight: "1.4", fontWeight: "500" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "1.2", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", fontWeight: "700" }],
+                        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .cargo-tag {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+        }
+        .cargo-tag-inner {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+        }
+        
+        @keyframes slideInMarker {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .gauge-marker {
+            animation: slideInMarker 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+        .gauge-marker:nth-child(1) { animation-delay: 0.1s; }
+        .gauge-marker:nth-child(2) { animation-delay: 0.2s; }
+        .gauge-marker:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar -->
+<header class="bg-primary dark:bg-primary text-on-primary dark:text-on-primary w-full border-b-2 border-primary flex justify-between items-center px-margin-desktop h-16 shrink-0 z-50 relative">
+<div class="flex items-center gap-stack-md">
+<span class="font-headline-md text-headline-md font-bold uppercase tracking-tight">Reorder Tracker</span>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="flex items-center gap-2 bg-secondary-container text-on-secondary-container font-label-caps text-label-caps uppercase border-2 border-primary px-4 py-2 hover:translate-x-[2px] hover:translate-y-[2px] transition-transform active:translate-x-[4px] active:translate-y-[4px]" style="box-shadow: 2px 2px 0 0 #060e1a;">
+<span class="material-symbols-outlined" data-icon="add" style="font-variation-settings: 'FILL' 1;">add</span>
+                Add Item
+            </button>
+<button class="flex items-center gap-2 bg-secondary-container text-on-secondary-container font-label-caps text-label-caps uppercase border-2 border-primary px-4 py-2 hover:translate-x-[2px] hover:translate-y-[2px] transition-transform active:translate-x-[4px] active:translate-y-[4px]" style="box-shadow: 2px 2px 0 0 #060e1a;">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
+                Log Sale
+            </button>
+<div class="flex gap-4 ml-4 pl-4 border-l-2 border-primary-container">
+<button aria-label="Notifications" class="text-on-primary-container hover:bg-primary-container hover:text-on-primary-container p-2 rounded-sm transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button aria-label="Settings" class="text-on-primary-container hover:bg-primary-container hover:text-on-primary-container p-2 rounded-sm transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full w-64 border-r-2 border-primary bg-surface dark:bg-surface py-stack-lg shrink-0 z-40">
+<div class="px-margin-desktop mb-stack-lg">
+<h2 class="font-headline-md text-headline-md text-primary font-bold">Inventory Ops</h2>
+<p class="font-data-mono text-data-mono text-outline mt-1 uppercase text-xs">Whse: 042-NORTH</p>
+</div>
+<ul class="flex flex-col gap-2">
+<li>
+<a aria-current="page" class="bg-secondary text-on-secondary border-2 border-primary flex items-center gap-stack-md p-stack-md mx-2 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="text-primary flex items-center gap-stack-md p-stack-md mx-2 font-label-caps text-label-caps uppercase tracking-wider hover:bg-surface-container-highest hover:translate-x-[2px] hover:translate-y-[2px] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                        Inventory
+                    </a>
+</li>
+<li>
+<a class="text-primary flex items-center gap-stack-md p-stack-md mx-2 font-label-caps text-label-caps uppercase tracking-wider hover:bg-surface-container-highest hover:translate-x-[2px] hover:translate-y-[2px] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+                        Shipments
+                    </a>
+</li>
+<li>
+<a class="text-primary flex items-center gap-stack-md p-stack-md mx-2 font-label-caps text-label-caps uppercase tracking-wider hover:bg-surface-container-highest hover:translate-x-[2px] hover:translate-y-[2px] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                        Reports
+                    </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop bg-surface-container-lowest">
+<div class="max-w-6xl mx-auto space-y-stack-lg">
+<!-- Summary Tiles -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Total Items -->
+<div class="cargo-tag bg-primary p-0.5 border-none">
+<div class="cargo-tag-inner bg-surface h-full p-stack-md border-2 border-primary relative flex flex-col justify-between min-h-[140px]">
+<h3 class="font-label-caps text-label-caps uppercase text-outline tracking-widest border-b border-outline-variant pb-2 mb-4">Total Inventory Items</h3>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg font-data-mono text-primary">1,402</span>
+<span class="material-symbols-outlined text-outline-variant text-4xl" data-icon="inventory_2" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+</div>
+</div>
+</div>
+<!-- Reorder Needed -->
+<div class="cargo-tag bg-primary p-0.5 border-none">
+<div class="cargo-tag-inner bg-surface h-full p-stack-md border-2 border-primary relative flex flex-col justify-between min-h-[140px]">
+<h3 class="font-label-caps text-label-caps uppercase text-outline tracking-widest border-b border-outline-variant pb-2 mb-4">Items Needing Reorder</h3>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg font-data-mono text-secondary-container">24</span>
+<span class="material-symbols-outlined text-secondary-container text-4xl" data-icon="shopping_cart" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+</div>
+</div>
+</div>
+<!-- Critical Items -->
+<div class="cargo-tag bg-primary p-0.5 border-none">
+<div class="cargo-tag-inner bg-surface h-full p-stack-md border-2 border-primary relative flex flex-col justify-between min-h-[140px]">
+<h3 class="font-label-caps text-label-caps uppercase text-outline tracking-widest border-b border-outline-variant pb-2 mb-4">Critical Stock Level</h3>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg font-data-mono text-error">7</span>
+<span class="material-symbols-outlined text-error text-4xl" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Inventory Table Section -->
+<section class="bg-surface border-2 border-primary flex flex-col">
+<header class="border-b-2 border-primary p-stack-md bg-surface-container flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Active Inventory</h2>
+<div class="flex gap-2">
+<button class="p-2 border-2 border-primary hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+<button class="p-2 border-2 border-primary hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</header>
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b-2 border-primary bg-surface-container-lowest">
+<th class="p-stack-sm md:p-stack-md font-label-caps text-label-caps uppercase text-outline w-1/3">Item Name</th>
+<th class="p-stack-sm md:p-stack-md font-label-caps text-label-caps uppercase text-outline w-1/4">SKU</th>
+<th class="p-stack-sm md:p-stack-md font-label-caps text-label-caps uppercase text-outline w-1/4">Stock Position</th>
+<th class="p-stack-sm md:p-stack-md font-label-caps text-label-caps uppercase text-outline w-1/6">Status</th>
+</tr>
+</thead>
+<tbody>
+<!-- Critical Item Row -->
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors relative">
+<td class="p-stack-sm md:p-stack-md font-body-lg text-body-lg font-medium text-primary">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="pl-2">Organic Coffee Beans</div>
+</td>
+<td class="p-stack-sm md:p-stack-md font-data-mono text-data-mono text-on-surface-variant">COF-ORG-01</td>
+<td class="p-stack-sm md:p-stack-md">
+<div class="w-32 h-4 border-2 border-primary flex relative bg-surface-container-lowest overflow-hidden">
+<!-- Gauge Zones -->
+<div class="w-1/3 bg-error opacity-20"></div>
+<div class="w-1/3 bg-secondary-container opacity-20"></div>
+<div class="w-1/3 bg-tertiary-fixed opacity-20"></div>
+<!-- Current Level Marker -->
+<div class="absolute top-0 bottom-0 w-2 bg-error border-r border-l border-primary gauge-marker" style="left: 15%;"></div>
+</div>
+</td>
+<td class="p-stack-sm md:p-stack-md">
+<span class="inline-flex items-center px-2 py-1 border border-primary bg-error-container text-on-error-container font-label-caps text-[10px] uppercase tracking-wider font-bold" style="clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);">
+                                            Critical
+                                        </span>
+</td>
+</tr>
+<!-- Reorder Item Row -->
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
+<td class="p-stack-sm md:p-stack-md font-body-lg text-body-lg font-medium text-primary pl-4 md:pl-[1.125rem]">Oat Milk</td>
+<td class="p-stack-sm md:p-stack-md font-data-mono text-data-mono text-on-surface-variant">MLK-OAT-12</td>
+<td class="p-stack-sm md:p-stack-md">
+<div class="w-32 h-4 border-2 border-primary flex relative bg-surface-container-lowest overflow-hidden">
+<!-- Gauge Zones -->
+<div class="w-1/3 bg-error opacity-20"></div>
+<div class="w-1/3 bg-secondary-container opacity-20"></div>
+<div class="w-1/3 bg-tertiary-fixed opacity-20"></div>
+<!-- Current Level Marker -->
+<div class="absolute top-0 bottom-0 w-2 bg-secondary border-r border-l border-primary gauge-marker" style="left: 45%;"></div>
+</div>
+</td>
+<td class="p-stack-sm md:p-stack-md">
+<span class="inline-flex items-center px-2 py-1 border border-primary bg-secondary-fixed text-on-secondary-fixed font-label-caps text-[10px] uppercase tracking-wider font-bold" style="clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);">
+                                            Reorder
+                                        </span>
+</td>
+</tr>
+<!-- Healthy Item Row -->
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
+<td class="p-stack-sm md:p-stack-md font-body-lg text-body-lg font-medium text-primary pl-4 md:pl-[1.125rem]">Paper Filters</td>
+<td class="p-stack-sm md:p-stack-md font-data-mono text-data-mono text-on-surface-variant">ACC-FLT-100</td>
+<td class="p-stack-sm md:p-stack-md">
+<div class="w-32 h-4 border-2 border-primary flex relative bg-surface-container-lowest overflow-hidden">
+<!-- Gauge Zones -->
+<div class="w-1/3 bg-error opacity-20"></div>
+<div class="w-1/3 bg-secondary-container opacity-20"></div>
+<div class="w-1/3 bg-tertiary-fixed opacity-20"></div>
+<!-- Current Level Marker -->
+<div class="absolute top-0 bottom-0 w-2 bg-on-tertiary-fixed-variant border-r border-l border-primary gauge-marker" style="left: 85%;"></div>
+</div>
+</td>
+<td class="p-stack-sm md:p-stack-md">
+<span class="inline-flex items-center px-2 py-1 border border-primary bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-[10px] uppercase tracking-wider font-bold" style="clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);">
+                                            Healthy
+                                        </span>
+</td>
+</tr>
+<!-- Healthy Item Row 2 -->
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors bg-[#f4f6fc]">
+<td class="p-stack-sm md:p-stack-md font-body-lg text-body-lg font-medium text-primary pl-4 md:pl-[1.125rem]">Ceramic Mugs</td>
+<td class="p-stack-sm md:p-stack-md font-data-mono text-data-mono text-on-surface-variant">MUG-CER-04</td>
+<td class="p-stack-sm md:p-stack-md">
+<div class="w-32 h-4 border-2 border-primary flex relative bg-surface-container-lowest overflow-hidden">
+<!-- Gauge Zones -->
+<div class="w-1/3 bg-error opacity-20"></div>
+<div class="w-1/3 bg-secondary-container opacity-20"></div>
+<div class="w-1/3 bg-tertiary-fixed opacity-20"></div>
+<!-- Current Level Marker -->
+<div class="absolute top-0 bottom-0 w-2 bg-on-tertiary-fixed-variant border-r border-l border-primary gauge-marker" style="left: 95%;"></div>
+</div>
+</td>
+<td class="p-stack-sm md:p-stack-md">
+<span class="inline-flex items-center px-2 py-1 border border-primary bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-[10px] uppercase tracking-wider font-bold" style="clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);">
+                                            Healthy
+                                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

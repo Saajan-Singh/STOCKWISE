@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Log Sale Modal - Reorder Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface-variant": "#45474c",
+                        "outline-variant": "#c5c6cc",
+                        "inverse-primary": "#bfc7d7",
+                        "primary-container": "#1c2430",
+                        "outline": "#75777c",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#709377",
+                        "surface-dim": "#d4dae7",
+                        "secondary": "#8c4f00",
+                        "on-background": "#151c25",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#ffdcbf",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#2d1600",
+                        "secondary-container": "#fca956",
+                        "on-tertiary-fixed-variant": "#2e4e37",
+                        "surface-tint": "#575f6d",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#abcfb1",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed": "#01210e",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-container": "#838b9a",
+                        "inverse-surface": "#2a313b",
+                        "tertiary": "#001105",
+                        "primary-fixed-dim": "#bfc7d7",
+                        "surface-container-highest": "#dce3f0",
+                        "on-secondary-container": "#713f00",
+                        "on-surface": "#151c25",
+                        "primary": "#060e1a",
+                        "tertiary-fixed": "#c7eccc",
+                        "surface-container-low": "#eef4ff",
+                        "on-primary-fixed": "#141c28",
+                        "secondary-fixed-dim": "#ffb874",
+                        "on-primary-fixed-variant": "#3f4754",
+                        "tertiary-container": "#082915",
+                        "surface-container": "#e7eefb",
+                        "inverse-on-surface": "#eaf1fe",
+                        "on-secondary-fixed-variant": "#6b3b00",
+                        "primary-fixed": "#dbe3f3",
+                        "surface-variant": "#dce3f0",
+                        "surface-container-high": "#e2e8f5",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "background": "#f8f9ff"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "margin-desktop": "32px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "stack-lg": "32px"
+                    },
+                    fontFamily: {
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "data-mono": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "body-md": ["Inter"]
+                    },
+                    fontSize: {
+                        "body-lg": ["18px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "label-caps": ["12px", { lineHeight: "1", letterSpacing: "0.05em", fontWeight: "700" }],
+                        "headline-md": ["20px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "data-mono": ["14px", { lineHeight: "1.4", fontWeight: "500" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "1.2", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", fontWeight: "700" }],
+                        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Ensure font weights are applied correctly for label-caps and headers based on config */
+        .font-label-caps { font-weight: 700; text-transform: uppercase; }
+        .font-headline-md { font-weight: 600; }
+        .font-data-mono { font-weight: 500; }
+        
+        /* Modal Backdrop */
+        .brutal-backdrop {
+            background-image: radial-gradient(circle, theme('colors.primary') 1px, transparent 1px);
+            background-size: 8px 8px;
+            background-color: rgba(248, 249, 255, 0.85); /* surface color with opacity */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen w-screen overflow-hidden flex font-body-md">
+<!-- App Shell: SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-64 border-r-2 border-primary bg-surface py-stack-lg z-0 relative">
+<div class="px-margin-desktop mb-8">
+<h1 class="font-headline-md text-headline-md text-primary truncate">Inventory Ops</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-1">Whse: 042-NORTH</p>
+</div>
+<div class="flex flex-col gap-1 w-full">
+<a class="text-primary flex items-center gap-stack-md p-stack-md mx-2 hover:bg-surface-container-highest hover:translate-x-[2px] hover:translate-y-[2px] transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<!-- Active Tab -->
+<a class="bg-secondary text-on-secondary border-2 border-primary flex items-center gap-stack-md p-stack-md mx-2 active:translate-x-[2px] active:translate-y-[2px] transition-all shadow-[2px_2px_0_0_theme(colors.primary)]" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-caps text-label-caps">Inventory</span>
+</a>
+<a class="text-primary flex items-center gap-stack-md p-stack-md mx-2 hover:bg-surface-container-highest hover:translate-x-[2px] hover:translate-y-[2px] transition-all" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-label-caps text-label-caps">Shipments</span>
+</a>
+<a class="text-primary flex items-center gap-stack-md p-stack-md mx-2 hover:bg-surface-container-highest hover:translate-x-[2px] hover:translate-y-[2px] transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps">Reports</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full relative z-0">
+<!-- App Shell: TopNavBar -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-16 bg-primary w-full border-b-2 border-primary">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold uppercase text-on-primary tracking-tight">Reorder Tracker</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-primary-container hover:bg-primary-container hover:text-on-primary-container p-2 border-2 border-transparent active:translate-x-[2px] active:translate-y-[2px] transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-primary-container hover:bg-primary-container hover:text-on-primary-container p-2 border-2 border-transparent active:translate-x-[2px] active:translate-y-[2px] transition-transform">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Mock background content -->
+<div class="p-margin-desktop flex-1 opacity-20 filter blur-[2px]">
+<div class="h-64 border-2 border-primary bg-surface-container-lowest w-full mb-8"></div>
+<div class="h-64 border-2 border-primary bg-surface-container-lowest w-full"></div>
+</div>
+</main>
+<!-- MODAL OVERLAY -->
+<div class="fixed inset-0 z-50 flex items-center justify-center brutal-backdrop p-margin-mobile md:p-margin-desktop">
+<!-- MODAL CONTAINER (Brutalist Box) -->
+<div class="w-full max-w-[480px] bg-surface border-2 border-primary shadow-[6px_6px_0_0_theme(colors.primary)] flex flex-col pointer-events-auto transition-transform">
+<!-- Modal Header -->
+<div class="flex items-center justify-between p-stack-md border-b-2 border-primary bg-surface-container-lowest">
+<h2 class="font-headline-md text-headline-md text-primary tracking-tight">LOG SALE</h2>
+<button aria-label="Close modal" class="text-primary hover:bg-primary hover:text-on-primary w-8 h-8 flex items-center justify-center border-2 border-transparent hover:border-primary transition-colors focus:outline-none">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<div class="p-margin-desktop flex flex-col gap-stack-lg bg-surface">
+<!-- Field: Searchable Dropdown -->
+<div class="flex flex-col gap-stack-sm relative">
+<label class="font-label-caps text-label-caps text-primary flex justify-between">
+<span>ITEM IDENTIFIER</span>
+<span class="text-outline">REQ</span>
+</label>
+<div class="relative w-full group">
+<input class="w-full bg-surface-container-lowest border-2 border-primary p-3 font-body-md text-body-md text-primary focus:border-[3px] focus:p-[11px] outline-none transition-all pr-12 placeholder:text-outline-variant rounded-none" placeholder="SKU or Product Name..." type="text"/>
+<div class="absolute right-0 top-0 bottom-0 w-12 border-l-2 border-primary bg-surface-container flex items-center justify-center pointer-events-none group-focus-within:border-l-[3px]">
+<span class="material-symbols-outlined text-primary">search</span>
+</div>
+</div>
+</div>
+<!-- Field Row: Quantity & Date -->
+<div class="flex flex-col sm:flex-row gap-gutter">
+<!-- Field: Quantity Stepper (JetBrains Mono) -->
+<div class="flex flex-col gap-stack-sm flex-1">
+<label class="font-label-caps text-label-caps text-primary">QTY DISPATCHED</label>
+<div class="flex border-2 border-primary w-full bg-surface-container-lowest">
+<button class="w-12 h-12 flex items-center justify-center bg-surface-container hover:bg-primary hover:text-on-primary border-r-2 border-primary transition-colors focus:outline-none focus:bg-primary focus:text-on-primary" type="button">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<input class="flex-1 h-12 text-center bg-transparent font-data-mono text-data-mono text-primary outline-none focus:bg-surface-variant" type="text" value="01"/>
+<button class="w-12 h-12 flex items-center justify-center bg-surface-container hover:bg-primary hover:text-on-primary border-l-2 border-primary transition-colors focus:outline-none focus:bg-primary focus:text-on-primary" type="button">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<!-- Field: Date Picker (JetBrains Mono) -->
+<div class="flex flex-col gap-stack-sm flex-1">
+<label class="font-label-caps text-label-caps text-primary">TIMESTAMP</label>
+<div class="relative w-full group">
+<input class="w-full bg-surface-container-lowest border-2 border-primary p-3 h-12 font-data-mono text-data-mono text-primary outline-none transition-all pr-12 cursor-pointer focus:border-[3px] focus:p-[11px]" readonly="" type="text" value="2023-10-27"/>
+<div class="absolute right-0 top-0 bottom-0 w-12 border-l-2 border-primary bg-surface-container flex items-center justify-center pointer-events-none group-focus-within:border-l-[3px]">
+<span class="material-symbols-outlined text-primary text-[18px]">calendar_today</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="p-stack-md border-t-2 border-primary flex justify-end gap-stack-md bg-surface-container-lowest">
+<button class="px-6 py-3 border-2 border-primary bg-surface font-label-caps text-label-caps text-primary hover:bg-surface-variant hover:translate-x-[2px] hover:translate-y-[2px] transition-transform focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" type="button">
+                    CANCEL
+                </button>
+<!-- Primary Action: Warehouse Amber -->
+<button class="px-8 py-3 border-2 border-primary bg-secondary-container font-label-caps text-label-caps text-primary shadow-[2px_2px_0_0_theme(colors.primary)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-secondary active:text-on-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" type="button">
+                    LOG SALE
+                </button>
+</div>
+</div>
+</div>
+</body></html>
