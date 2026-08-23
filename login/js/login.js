@@ -172,6 +172,11 @@
       submitBtn.removeAttribute('disabled');
 
       console.log('[StockWise] Remember this device:', formData.remember);
+
+      showMessage('Clock in successful. Redirecting...', 'success');
+      setTimeout(function() {
+        window.location.href = '../dashboard/index.html';
+      }, 800);
     }, 900);
   });
 

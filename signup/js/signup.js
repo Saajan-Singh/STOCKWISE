@@ -304,8 +304,13 @@
       }
 
       /* In a real app this would POST to the server.
-         For now, show success and reset. */
-      showToast('Access request submitted! We\'ll be in touch shortly.', 'success');
+         For now, show success and redirect. */
+      showToast('Access request submitted! Redirecting...', 'success');
+      
+      setTimeout(function() {
+        window.location.href = '../dashboard/index.html';
+      }, 1200);
+
       form.reset();
 
       /* Clear valid indicators */

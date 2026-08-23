@@ -118,19 +118,19 @@ function initSmoothScroll() {
     });
   }
 
-  // Final CTA button → hero / sign-up flow (scroll to top for demo)
+  // Final CTA button → hero / sign-up flow
   const finalCTABtn = document.getElementById('final-cta-btn');
   if (finalCTABtn) {
     finalCTABtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.location.href = '../signup/index.html';
     });
   }
 
-  // Hero primary CTA → scroll to top (demo)
+  // Hero primary CTA → sign-up flow
   const heroCTAPrimary = document.getElementById('hero-cta-primary');
   if (heroCTAPrimary) {
     heroCTAPrimary.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.location.href = '../signup/index.html';
     });
   }
 
@@ -138,21 +138,21 @@ function initSmoothScroll() {
   const btnFreePlan = document.getElementById('btn-free-plan');
   if (btnFreePlan) {
     btnFreePlan.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.location.href = '../signup/index.html';
     });
   }
   const btnProPlan = document.getElementById('btn-pro-plan');
   if (btnProPlan) {
     btnProPlan.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.location.href = '../signup/index.html';
     });
   }
 
   // Login / signup buttons
   const btnLogin  = document.getElementById('btn-login');
   const btnSignup = document.getElementById('btn-signup');
-  if (btnLogin)  btnLogin.addEventListener('click',  () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-  if (btnSignup) btnSignup.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  if (btnLogin)  btnLogin.addEventListener('click',  () => window.location.href = '../login/index.html');
+  if (btnSignup) btnSignup.addEventListener('click', () => window.location.href = '../signup/index.html');
 }
 
 /* ================================================================
