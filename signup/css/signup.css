@@ -100,6 +100,7 @@
 html {
   font-size: 16px;
   height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -107,14 +108,16 @@ body {
   font-size: var(--fs-body-md);
   line-height: var(--lh-body);
   color: var(--on-surface);
-  background-color: var(--surface-container-high);
-  min-height: 100%;
+  background-color: var(--surface);
+  min-height: 100vh;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--margin-mobile);
   position: relative;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 a {
@@ -141,8 +144,9 @@ fieldset {
 .page-backdrop {
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(rgba(21, 28, 37, 0.25) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-color: var(--surface);
+  background-image: radial-gradient(var(--surface-dim) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
   pointer-events: none;
   z-index: 0;
 }
@@ -155,13 +159,13 @@ fieldset {
   z-index: 1;
   width: 100%;
   max-width: 900px;
-  background-color: var(--paper);
-  border: var(--border-width) solid var(--ink-navy);
-  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 0 var(--ink-navy);
+  background-color: var(--surface-container-lowest);
+  border: var(--border-width) solid var(--primary);
+  box-shadow: var(--shadow-offset-lg) var(--shadow-offset-lg) 0 0 var(--ink-navy);
   display: flex;
   flex-direction: column;
-  /* room for the bottom gauge strip */
-  padding-bottom: 8px;
+  overflow: hidden;
+  margin: auto;
   /* animate in */
   animation: card-appear 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -186,9 +190,9 @@ fieldset {
   align-items: center;
   justify-content: center;
   gap: var(--stack-sm);
-  padding: var(--margin-desktop);
-  border-bottom: var(--border-width) solid var(--ink-navy);
-  background-color: var(--surface-container-lowest);
+  padding: var(--stack-md) var(--stack-lg);
+  border-bottom: var(--border-width) solid var(--primary);
+  background-color: var(--surface);
   text-align: center;
 }
 
@@ -241,8 +245,8 @@ fieldset {
 .signup-form {
   display: flex;
   flex-direction: column;
-  padding: var(--margin-desktop);
-  gap: var(--stack-lg);
+  padding: var(--stack-lg);
+  gap: var(--stack-md);
 }
 
 /* Two-column grid */
@@ -339,7 +343,7 @@ fieldset {
    ---------------------------------------------------------------- */
 .field-input {
   width: 100%;
-  height: 44px;
+  height: 42px;
   background-color: var(--surface-container-lowest);
   border: var(--border-width) solid var(--primary);
   padding: 0 var(--stack-md);
@@ -665,13 +669,10 @@ fieldset {
    15. DECORATIVE GAUGE STRIP (bottom of card)
    ---------------------------------------------------------------- */
 .gauge-strip {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 8px;
   display: flex;
-  pointer-events: none;
+  height: 8px;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 .gauge-segment {
@@ -686,11 +687,13 @@ fieldset {
 .gauge-segment--amber {
   background-color: var(--warehouse-amber);
   flex: 2;
+  border-left: 1px solid var(--primary);
 }
 
 .gauge-segment--rust {
   background-color: var(--rust-red);
   flex: 1;
+  border-left: 1px solid var(--primary);
 }
 
 /* ----------------------------------------------------------------
@@ -757,8 +760,39 @@ fieldset {
 }
 
 /* ----------------------------------------------------------------
-   18. RESPONSIVE — mobile tweaks
+   18. RESPONSIVE — height & mobile tweaks
    ---------------------------------------------------------------- */
+@media (max-height: 850px) {
+  .wordmark {
+    font-size: var(--fs-headline-lg);
+  }
+  .card-header {
+    padding: 16px;
+    gap: 4px;
+  }
+  .signup-form {
+    padding: 16px;
+    gap: 16px;
+  }
+  .detail-col {
+    gap: 8px;
+  }
+  .field-input {
+    height: 36px;
+  }
+  .col-legend, .field-label, .btn-request {
+    font-size: 11px;
+  }
+  .btn-request {
+    padding: 10px 20px;
+    min-width: 200px;
+  }
+  .form-footer {
+    padding-top: 8px;
+    gap: 8px;
+  }
+}
+
 @media (max-width: 480px) {
   .wordmark {
     font-size: var(--fs-headline-lg);
