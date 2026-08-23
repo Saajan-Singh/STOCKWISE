@@ -11,37 +11,37 @@
    ---------------------------------------------------------------- */
 :root {
   /* -- Brand Colors -- */
-  --ink-navy:        #1c2430;
-  --paper:           #f6f4ef;
+  --ink-navy: #1c2430;
+  --paper: #f6f4ef;
   --warehouse-amber: #c77d2e;
-  --sage:            #6e9075;
-  --rust-red:        #b5482f;
-  --slate-gray:      #9ca3af;
+  --sage: #6e9075;
+  --rust-red: #b5482f;
+  --slate-gray: #9ca3af;
 
   /* -- Surface Palette -- */
-  --surface:                   #f8f9ff;
-  --surface-dim:               #d4dae7;
-  --surface-container-lowest:  #ffffff;
-  --surface-container-low:     #eef4ff;
-  --surface-container:         #e7eefb;
-  --surface-container-high:    #e2e8f5;
-  --on-surface:                #151c25;
-  --on-surface-variant:        #45474c;
-  --outline:                   #75777c;
-  --outline-variant:           #c5c6cc;
+  --surface: #f8f9ff;
+  --surface-dim: #d4dae7;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #eef4ff;
+  --surface-container: #e7eefb;
+  --surface-container-high: #e2e8f5;
+  --on-surface: #151c25;
+  --on-surface-variant: #45474c;
+  --outline: #75777c;
+  --outline-variant: #c5c6cc;
 
   /* -- Primary -- */
-  --primary:           #060e1a;
-  --on-primary:        #ffffff;
+  --primary: #060e1a;
+  --on-primary: #ffffff;
   --primary-container: #1c2430;
 
   /* -- Secondary (Amber) -- */
-  --secondary:           #8c4f00;
-  --on-secondary:        #ffffff;
+  --secondary: #8c4f00;
+  --on-secondary: #ffffff;
   --secondary-container: #fca956;
 
   /* -- Tertiary -- */
-  --tertiary-fixed:        #c7eccc;
+  --tertiary-fixed: #c7eccc;
   --on-tertiary-container: #709377;
 
   /* -- Error -- */
@@ -49,34 +49,34 @@
 
   /* -- Typography -- */
   --font-headline: 'Space Grotesk', sans-serif;
-  --font-body:     'Inter', sans-serif;
-  --font-mono:     'JetBrains Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
-  --fs-display-lg:  48px;
+  --fs-display-lg: 48px;
   --fs-headline-lg: 32px;
   --fs-headline-md: 20px;
-  --fs-body-lg:     18px;
-  --fs-body-md:     16px;
-  --fs-data-mono:   14px;
-  --fs-label-caps:  12px;
+  --fs-body-lg: 18px;
+  --fs-body-md: 16px;
+  --fs-data-mono: 14px;
+  --fs-label-caps: 12px;
 
-  --lh-display:  1.1;
+  --lh-display: 1.1;
   --lh-headline: 1.2;
-  --lh-body:     1.5;
-  --lh-mono:     1.4;
+  --lh-body: 1.5;
+  --lh-mono: 1.4;
 
   /* -- Spacing -- */
-  --unit:           4px;
-  --stack-sm:       8px;
-  --stack-md:       16px;
-  --stack-lg:       32px;
-  --gutter:         16px;
-  --margin-mobile:  16px;
+  --unit: 4px;
+  --stack-sm: 8px;
+  --stack-md: 16px;
+  --stack-lg: 32px;
+  --gutter: 16px;
+  --margin-mobile: 16px;
   --margin-desktop: 32px;
 
   /* -- Effects -- */
   --border-width: 2px;
-  --shadow-hard:  4px 4px 0 0 var(--ink-navy);
+  --shadow-hard: 4px 4px 0 0 var(--ink-navy);
 
   /* -- Transitions -- */
   --transition-fast: 150ms ease;
@@ -255,7 +255,8 @@ button {
   border: var(--border-width) solid var(--ink-navy);
   box-shadow: var(--shadow-hard);
   padding: var(--stack-lg) var(--margin-desktop);
-  display: none; /* shown via JS when session exists */
+  display: none;
+  /* shown via JS when session exists */
   flex-direction: column;
   gap: var(--stack-sm);
   animation: section-appear 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -321,7 +322,8 @@ button {
   border: var(--border-width) solid var(--ink-navy);
   box-shadow: var(--shadow-hard);
   padding: var(--stack-lg) var(--margin-desktop);
-  display: none; /* shown via JS when no session */
+  display: none;
+  /* shown via JS when no session */
   flex-direction: column;
   align-items: center;
   gap: var(--stack-md);
@@ -453,17 +455,37 @@ button {
   margin-top: auto;
 }
 
-.gauge-segment       { flex: 1; }
-.gauge-segment--sage  { background-color: var(--on-tertiary-container, #709377); }
-.gauge-segment--amber { background-color: var(--secondary);  border-left: 1px solid var(--primary); }
-.gauge-segment--rust  { background-color: var(--error);      border-left: 1px solid var(--primary); }
+.gauge-segment {
+  flex: 1;
+}
+
+.gauge-segment--sage {
+  background-color: var(--on-tertiary-container, #709377);
+}
+
+.gauge-segment--amber {
+  background-color: var(--secondary);
+  border-left: 1px solid var(--primary);
+}
+
+.gauge-segment--rust {
+  background-color: var(--error);
+  border-left: 1px solid var(--primary);
+}
 
 /* ----------------------------------------------------------------
    9. ANIMATION
    ---------------------------------------------------------------- */
 @keyframes section-appear {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0);    }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ----------------------------------------------------------------

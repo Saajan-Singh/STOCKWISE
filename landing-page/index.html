@@ -69,75 +69,122 @@
         </div>
 
         <!-- Right: Active Inventory Widget -->
-        <div class="inventory-widget" role="region" aria-label="Active Inventory preview">
-          <div class="inventory-widget__header">
-            <span class="label-caps">ACTIVE INVENTORY</span>
-            <span class="material-symbols-outlined" aria-hidden="true">more_horiz</span>
+        <div class="hero__widget-wrapper">
+          <div class="inventory-widget" role="region" aria-label="Active Inventory preview">
+            <div class="inventory-widget__header">
+              <span class="label-caps">ACTIVE INVENTORY</span>
+              <span class="material-symbols-outlined" aria-hidden="true">more_horiz</span>
+            </div>
+
+            <div class="inventory-widget__rows">
+              <!-- Row 1 — Critical -->
+              <div class="inventory-row inventory-row--critical">
+                <div class="inventory-row__info">
+                  <span class="inventory-row__sku">SKU-A892</span>
+                  <span class="inventory-row__name">Industrial Bearings</span>
+                </div>
+                <div class="inventory-row__status-area">
+                  <div class="stock-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="25% stock remaining">
+                    <div class="stock-bar__fill stock-bar__fill--critical" data-width="25"></div>
+                  </div>
+                  <span class="status-badge status-badge--critical">CRITICAL</span>
+                </div>
+              </div>
+
+              <!-- Row 2 — Reorder -->
+              <div class="inventory-row inventory-row--reorder">
+                <div class="inventory-row__info">
+                  <span class="inventory-row__sku">SKU-B441</span>
+                  <span class="inventory-row__name">Hydraulic Fluid (5G)</span>
+                </div>
+                <div class="inventory-row__status-area">
+                  <div class="stock-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="50% stock remaining">
+                    <div class="stock-bar__fill stock-bar__fill--reorder" data-width="50"></div>
+                  </div>
+                  <span class="status-badge status-badge--reorder">REORDER</span>
+                </div>
+              </div>
+
+              <!-- Row 3 — Healthy -->
+              <div class="inventory-row">
+                <div class="inventory-row__info">
+                  <span class="inventory-row__sku">SKU-C990</span>
+                  <span class="inventory-row__name">Safety Goggles</span>
+                </div>
+                <div class="inventory-row__status-area">
+                  <div class="stock-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="75% stock remaining">
+                    <div class="stock-bar__fill stock-bar__fill--healthy" data-width="75"></div>
+                  </div>
+                  <span class="status-badge status-badge--healthy">HEALTHY</span>
+                </div>
+              </div>
+
+              <!-- Row 4 — Reorder -->
+              <div class="inventory-row inventory-row--reorder">
+                <div class="inventory-row__info">
+                  <span class="inventory-row__sku">SKU-D217</span>
+                  <span class="inventory-row__name">Packing Tape (48mm)</span>
+                </div>
+                <div class="inventory-row__status-area">
+                  <div class="stock-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="40% stock remaining">
+                    <div class="stock-bar__fill stock-bar__fill--reorder" data-width="40"></div>
+                  </div>
+                  <span class="status-badge status-badge--reorder">REORDER</span>
+                </div>
+              </div>
+
+              <!-- Row 5 — Healthy -->
+              <div class="inventory-row">
+                <div class="inventory-row__info">
+                  <span class="inventory-row__sku">SKU-E654</span>
+                  <span class="inventory-row__name">Steel Fasteners M8</span>
+                </div>
+                <div class="inventory-row__status-area">
+                  <div class="stock-bar" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" aria-label="88% stock remaining">
+                    <div class="stock-bar__fill stock-bar__fill--healthy" data-width="88"></div>
+                  </div>
+                  <span class="status-badge status-badge--healthy">HEALTHY</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="inventory-widget__rows">
-            <!-- Row 1 — Critical -->
-            <div class="inventory-row inventory-row--critical">
-              <div class="inventory-row__info">
-                <span class="inventory-row__sku">SKU-A892</span>
-                <span class="inventory-row__name">Industrial Bearings</span>
-              </div>
-              <div class="inventory-row__status-area">
-                <div class="stock-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="25% stock remaining">
-                  <div class="stock-bar__fill stock-bar__fill--critical" data-width="25"></div>
-                </div>
-                <span class="status-badge status-badge--critical">CRITICAL</span>
-              </div>
-            </div>
-
-            <!-- Row 2 — Reorder -->
-            <div class="inventory-row inventory-row--reorder">
-              <div class="inventory-row__info">
-                <span class="inventory-row__sku">SKU-B441</span>
-                <span class="inventory-row__name">Hydraulic Fluid (5G)</span>
-              </div>
-              <div class="inventory-row__status-area">
-                <div class="stock-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="50% stock remaining">
-                  <div class="stock-bar__fill stock-bar__fill--reorder" data-width="50"></div>
-                </div>
-                <span class="status-badge status-badge--reorder">REORDER</span>
-              </div>
-            </div>
-
-            <!-- Row 3 — Healthy -->
-            <div class="inventory-row">
-              <div class="inventory-row__info">
-                <span class="inventory-row__sku">SKU-C990</span>
-                <span class="inventory-row__name">Safety Goggles</span>
-              </div>
-              <div class="inventory-row__status-area">
-                <div class="stock-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="75% stock remaining">
-                  <div class="stock-bar__fill stock-bar__fill--healthy" data-width="75"></div>
-                </div>
-                <span class="status-badge status-badge--healthy">HEALTHY</span>
-              </div>
-            </div>
+          <!-- Floating reorder alert card -->
+          <div class="reorder-alert-card" aria-label="Reorder alert">
+            <span class="material-symbols-outlined reorder-alert-card__icon" aria-hidden="true">warning</span>
+            <span class="reorder-alert-card__text">3 items need reordering</span>
           </div>
         </div>
 
       </div>
     </section>
 
-         <!-- STATS BAND -->
+         <!-- BUILT FOR BAND -->
 
-    <section class="stats-band" aria-label="Key statistics">
-      <div class="stats-band__container">
-        <div class="stat-item">
-          <span class="stat-item__number">10,000+</span>
-          <span class="stat-item__label">SKUs TRACKED</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-item__number">99.2%</span>
-          <span class="stat-item__label">STOCKOUT ACCURACY</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-item__number">3 Min</span>
-          <span class="stat-item__label">SETUP</span>
+    <section class="built-for-band" aria-label="Built for these business types">
+      <div class="built-for__container">
+        <span class="built-for__label">BUILT FOR BUSINESSES THAT MOVE REAL STOCK</span>
+        <div class="built-for__chips">
+          <div class="built-for__chip">
+            <span class="material-symbols-outlined built-for__chip-icon" aria-hidden="true">shopping_bag</span>
+            <span class="built-for__chip-text">RETAIL &amp; APPAREL</span>
+          </div>
+          <div class="built-for__chip">
+            <span class="material-symbols-outlined built-for__chip-icon" aria-hidden="true">coffee</span>
+            <span class="built-for__chip-text">CAFÉS &amp; FOOD</span>
+          </div>
+          <div class="built-for__chip">
+            <span class="material-symbols-outlined built-for__chip-icon" aria-hidden="true">build</span>
+            <span class="built-for__chip-text">AUTO PARTS</span>
+          </div>
+          <div class="built-for__chip">
+            <span class="material-symbols-outlined built-for__chip-icon" aria-hidden="true">package_2</span>
+            <span class="built-for__chip-text">E-COMMERCE FULFILLMENT</span>
+          </div>
+          <div class="built-for__chip">
+            <span class="material-symbols-outlined built-for__chip-icon" aria-hidden="true">warehouse</span>
+            <span class="built-for__chip-text">WHOLESALE &amp; DISTRIBUTION</span>
+          </div>
         </div>
       </div>
     </section>

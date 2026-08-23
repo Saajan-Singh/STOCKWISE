@@ -328,8 +328,8 @@ svg {
 .btn--cta-primary {
   background-color: var(--secondary-container);
   color: var(--primary);
-  font-size: var(--fs-headline-md);
-  padding: 12px 32px;
+  font-size: 22px;
+  padding: 14px 36px;
   box-shadow: var(--shadow-offset) var(--shadow-offset) 0 0 var(--ink-navy);
 }
 .btn--cta-primary:hover {
@@ -341,8 +341,8 @@ svg {
 .btn--cta-secondary {
   background-color: var(--surface-container-lowest);
   color: var(--primary);
-  font-size: var(--fs-headline-md);
-  padding: 12px 32px;
+  font-size: 22px;
+  padding: 14px 36px;
 }
 .btn--cta-secondary:hover {
   background-color: var(--surface-container-low);
@@ -511,7 +511,8 @@ svg {
    ---------------------------------------------------------------- */
 .hero {
   padding-top: 64px; /* Offset for fixed nav */
-  min-height: 820px;
+  min-height: 100vh;
+  min-height: 100dvh; /* modern viewport-aware unit */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -523,10 +524,10 @@ svg {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: var(--stack-lg) var(--margin-desktop);
+  padding: clamp(20px, 4vh, 48px) var(--margin-desktop) clamp(16px, 3vh, 40px);
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--stack-lg);
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(48px, 5vw, 80px);
   align-items: center;
 }
 
@@ -534,43 +535,91 @@ svg {
 .hero__copy {
   display: flex;
   flex-direction: column;
-  gap: var(--stack-md);
+  gap: clamp(20px, 3vh, 32px);
 }
 
 .hero__headline {
   font-family: var(--font-headline);
-  font-size: var(--fs-display-lg);
+  font-size: clamp(52px, 4.5vw, 60px);
   font-weight: 700;
-  line-height: var(--lh-display);
+  line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--primary);
   text-transform: uppercase;
 }
 
 .hero__subtext {
-  font-size: var(--fs-body-lg);
-  line-height: var(--lh-body);
+  font-size: 20px;
+  line-height: 1.55;
   color: var(--on-surface-variant);
-  max-width: 480px;
+  max-width: 520px;
   border-left: 4px solid var(--secondary-container);
   padding-left: var(--stack-md);
+}
+
+/* Badge override inside hero — slightly larger to match scaled headline */
+.hero__copy .badge {
+  font-size: 14px;
+  padding: 6px 12px;
 }
 
 .hero__ctas {
   display: flex;
   flex-wrap: wrap;
   gap: var(--stack-md);
-  margin-top: var(--stack-md);
+  margin-top: clamp(16px, 2.5vh, 28px);
 }
 
 /* ----------------------------------------------------------------
    9. ACTIVE INVENTORY WIDGET
    ---------------------------------------------------------------- */
+/* Widget wrapper — positioning context for floating card */
+.hero__widget-wrapper {
+  position: relative;
+  padding-bottom: 24px; /* room for floating card overlap */
+}
+
 .inventory-widget {
   background-color: var(--surface-container-lowest);
   border: var(--border-width) solid var(--ink-navy);
   padding: var(--stack-md);
-  box-shadow: 4px 4px 0 0 var(--ink-navy);
+  box-shadow:
+    4px 4px 0 0 var(--ink-navy),
+    0 8px 24px -4px rgba(28, 36, 48, 0.18);
+}
+
+/* Floating reorder alert card */
+.reorder-alert-card {
+  position: absolute;
+  bottom: 0;
+  left: -18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: var(--secondary-fixed);
+  border: var(--border-width) solid var(--ink-navy);
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--on-secondary-fixed);
+  transform: rotate(-2.5deg);
+  box-shadow:
+    3px 3px 0 0 var(--ink-navy),
+    0 6px 16px -2px rgba(28, 36, 48, 0.22);
+  z-index: 2;
+}
+
+.reorder-alert-card__icon {
+  font-size: 18px;
+  color: var(--secondary);
+  font-variation-settings: 'FILL' 1;
+}
+
+.reorder-alert-card__text {
+  white-space: nowrap;
 }
 
 .inventory-widget__header {
@@ -680,46 +729,71 @@ svg {
 }
 
 /* ----------------------------------------------------------------
-   10. STATS BAND
+   10. BUILT FOR BAND
    ---------------------------------------------------------------- */
-.stats-band {
+.built-for-band {
   background-color: var(--ink-navy);
   padding: 24px 0;
   border-bottom: var(--border-width) solid var(--primary);
 }
 
-.stats-band__container {
+.built-for__container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 var(--margin-desktop);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  gap: var(--stack-md);
-}
-
-.stat-item {
-  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 16px;
 }
 
-.stat-item__number {
-  font-family: var(--font-mono);
-  font-size: 30px;
-  font-weight: 700;
-  color: var(--on-primary);
-}
-
-.stat-item__label {
+.built-for__label {
   font-family: var(--font-headline);
   font-size: var(--fs-label-caps);
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--warehouse-amber);
+}
+
+.built-for__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+}
+
+.built-for__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  justify-content: center;
+  flex: 1 1 0;
+  border: 1px solid rgba(199, 125, 46, 0.4);
+  border-radius: 0;
+  background-color: rgba(199, 125, 46, 0.08);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.built-for__chip:hover {
+  background-color: rgba(199, 125, 46, 0.15);
+  border-color: rgba(199, 125, 46, 0.6);
+}
+
+.built-for__chip-icon {
+  font-size: 18px;
+  color: var(--warehouse-amber);
+  font-variation-settings: 'FILL' 0;
+}
+
+.built-for__chip-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   color: var(--paper);
+  white-space: nowrap;
 }
 
 /* ----------------------------------------------------------------
@@ -1617,8 +1691,8 @@ svg {
     font-size: 36px;
   }
 
-  /* Stats */
-  .stats-band__container {
+  /* Built For */
+  .built-for__container {
     padding: 0 var(--margin-mobile);
   }
 
@@ -1728,6 +1802,10 @@ svg {
     padding-top: 64px;
   }
 
+  .reorder-alert-card {
+    left: 0;
+  }
+
   .hero__container {
     padding: 32px var(--margin-mobile);
     gap: 24px;
@@ -1746,8 +1824,12 @@ svg {
     justify-content: center;
   }
 
-  .stat-item__number {
-    font-size: 24px;
+  .built-for__chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
   }
 
   .section-headline {
