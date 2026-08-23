@@ -1,0 +1,651 @@
+/* ================================================================
+   StockWise — Login Page Stylesheet
+   login/css/login.css
+   All values use CSS custom properties that mirror those defined
+   in landing-page/css/landing.css and signup/css/signup.css.
+   No hard-coded hex values below the :root block.
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   1. DESIGN TOKENS  (mirror landing.css / signup.css :root)
+   ---------------------------------------------------------------- */
+:root {
+  /* -- Brand Colors -- */
+  --ink-navy:           #1c2430;
+  --paper:              #f6f4ef;
+  --warehouse-amber:    #c77d2e;
+  --sage:               #6e9075;
+  --rust-red:           #b5482f;
+  --slate-gray:         #9ca3af;
+
+  /* -- Surface Palette -- */
+  --surface:                    #f8f9ff;
+  --surface-dim:                #d4dae7;
+  --surface-container-lowest:   #ffffff;
+  --surface-container-low:      #eef4ff;
+  --surface-container:          #e7eefb;
+  --surface-container-high:     #e2e8f5;
+  --surface-container-highest:  #dce3f0;
+  --on-surface:                 #151c25;
+  --on-surface-variant:         #45474c;
+  --outline:                    #75777c;
+  --outline-variant:            #c5c6cc;
+
+  /* -- Primary -- */
+  --primary:            #060e1a;
+  --on-primary:         #ffffff;
+  --primary-container:  #1c2430;
+
+  /* -- Secondary (Amber) -- */
+  --secondary:            #8c4f00;
+  --on-secondary:         #ffffff;
+  --secondary-container:  #fca956;
+
+  /* -- Tertiary (Sage/Green) -- */
+  --tertiary-fixed:             #c7eccc;
+  --on-tertiary-container:      #709377;
+
+  /* -- Error -- */
+  --error: #ba1a1a;
+
+  /* -- Typography -- */
+  --font-headline: 'Space Grotesk', sans-serif;
+  --font-body:     'Inter', sans-serif;
+  --font-mono:     'JetBrains Mono', monospace;
+
+  /* Font sizes */
+  --fs-display-lg:  48px;
+  --fs-headline-lg: 32px;
+  --fs-headline-md: 20px;
+  --fs-body-lg:     18px;
+  --fs-body-md:     16px;
+  --fs-data-mono:   14px;
+  --fs-label-caps:  12px;
+
+  /* Line heights */
+  --lh-display:  1.1;
+  --lh-headline: 1.2;
+  --lh-body:     1.5;
+  --lh-mono:     1.4;
+
+  /* -- Spacing (4 px base unit) -- */
+  --unit:           4px;
+  --stack-sm:       8px;
+  --stack-md:       16px;
+  --stack-lg:       32px;
+  --gutter:         16px;
+  --margin-mobile:  16px;
+  --margin-desktop: 32px;
+
+  /* -- Effects -- */
+  --border-width:    2px;
+  --shadow-offset:   4px;
+  --shadow-offset-lg: 8px;
+
+  /* -- Transitions -- */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+}
+
+/* ----------------------------------------------------------------
+   2. RESET & BASE
+   ---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-md);
+  line-height: var(--lh-body);
+  color: var(--on-surface);
+  background-color: var(--surface);
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--margin-mobile);
+  position: relative;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+/* ----------------------------------------------------------------
+   3. DOT-GRID BACKDROP
+   ---------------------------------------------------------------- */
+.page-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: var(--surface);
+  background-image: radial-gradient(var(--surface-dim) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ----------------------------------------------------------------
+   4. LOGIN CARD
+   ---------------------------------------------------------------- */
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 448px;
+  background-color: var(--surface-container-lowest);
+  border: var(--border-width) solid var(--primary);
+  box-shadow:
+    var(--shadow-offset-lg) var(--shadow-offset-lg) 0 0 var(--ink-navy);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Entrance animation */
+  animation: card-appear 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ----------------------------------------------------------------
+   5. CARD HEADER
+   ---------------------------------------------------------------- */
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--stack-sm);
+  padding: var(--stack-md) var(--stack-lg);
+  border-bottom: var(--border-width) solid var(--primary);
+  background-color: var(--surface);
+  text-align: center;
+}
+
+.terminal-label {
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+}
+
+.wordmark-row {
+  display: flex;
+  align-items: center;
+  gap: var(--stack-sm);
+}
+
+.wordmark-icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 1, 'wght' 600;
+  font-size: 32px;
+  color: var(--primary);
+  line-height: 1;
+  display: inline-block;
+}
+
+.wordmark {
+  font-family: var(--font-headline);
+  font-size: clamp(var(--fs-headline-lg), 6vw, var(--fs-display-lg));
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-display);
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+/* ----------------------------------------------------------------
+   6. FORM CANVAS
+   ---------------------------------------------------------------- */
+.form-canvas {
+  padding: var(--stack-lg);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-md);
+}
+
+/* ----------------------------------------------------------------
+   7. FIELD GROUPS & LABELS
+   ---------------------------------------------------------------- */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--unit);
+}
+
+.field-label {
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: var(--unit);
+}
+
+.label-icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0, 'wght' 400;
+  font-size: 16px;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Password row — label + eye toggle side by side */
+.password-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ----------------------------------------------------------------
+   8. INPUTS
+   ---------------------------------------------------------------- */
+.field-input {
+  width: 100%;
+  background-color: var(--surface-container-low);
+  border: var(--border-width) solid var(--primary);
+  padding: var(--stack-sm) var(--stack-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-mono);
+  font-weight: 500;
+  line-height: var(--lh-mono);
+  color: var(--primary);
+  transition:
+    border-width var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  outline: none;
+  border-radius: 0;
+  /* Ensure consistent height */
+  height: 42px;
+}
+
+.field-input::placeholder {
+  color: var(--outline);
+  font-style: normal;
+}
+
+.field-input:focus {
+  border-bottom-width: 4px;
+  border-right-width: 4px;
+}
+
+.field-input.is-invalid {
+  border-color: var(--error);
+}
+
+.field-input.is-valid {
+  border-color: var(--sage);
+}
+
+/* ----------------------------------------------------------------
+   9. FIELD ERROR MESSAGE
+   ---------------------------------------------------------------- */
+.field-error {
+  font-family: var(--font-body);
+  font-size: var(--fs-label-caps);
+  color: var(--error);
+  min-height: 14px;
+  display: block;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.field-error.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ----------------------------------------------------------------
+   10. EYE TOGGLE (password show/hide)
+   ---------------------------------------------------------------- */
+.eye-toggle {
+  display: flex;
+  align-items: center;
+  color: var(--secondary);
+  padding: 2px;
+  transition: color var(--transition-fast);
+}
+
+.eye-toggle:hover,
+.eye-toggle:focus-visible {
+  color: var(--primary);
+  outline: none;
+}
+
+.eye-toggle .material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0;
+  font-size: 16px;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* ----------------------------------------------------------------
+   11. REMEMBER CHECKBOX
+   ---------------------------------------------------------------- */
+.remember-row {
+  display: flex;
+  align-items: center;
+  gap: var(--stack-sm);
+  margin-top: var(--stack-sm);
+}
+
+.remember-checkbox {
+  /* Custom styled checkbox */
+  width: 16px;
+  height: 16px;
+  border: var(--border-width) solid var(--primary);
+  background-color: var(--surface-container-lowest);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: background-color var(--transition-fast);
+  border-radius: 0;
+}
+
+.remember-checkbox:checked {
+  background-color: var(--secondary);
+  border-color: var(--primary);
+}
+
+/* Checkmark via pseudo-element */
+.remember-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  color: var(--primary);
+  line-height: 1;
+  text-align: center;
+}
+
+.remember-checkbox:focus-visible {
+  outline: 2px solid var(--warehouse-amber);
+  outline-offset: 2px;
+}
+
+.remember-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-mono);
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ----------------------------------------------------------------
+   12. CLOCK IN BUTTON
+   ---------------------------------------------------------------- */
+.btn-clock-in {
+  width: 100%;
+  margin-top: var(--stack-sm);
+  background-color: var(--secondary);
+  color: var(--primary);
+  border: var(--border-width) solid var(--primary);
+  padding: var(--stack-md);
+  font-family: var(--font-headline);
+  font-size: var(--fs-headline-md);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  box-shadow: 4px 4px 0 0 var(--ink-navy);
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.btn-clock-in:hover {
+  background-color: var(--secondary-container);
+}
+
+.btn-clock-in:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--ink-navy);
+}
+
+.btn-clock-in:focus-visible {
+  outline: 3px solid var(--warehouse-amber);
+  outline-offset: 3px;
+}
+
+.btn-clock-in.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ----------------------------------------------------------------
+   13. LOGIN INLINE MESSAGE (success / error)
+   ---------------------------------------------------------------- */
+.login-message {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-mono);
+  font-weight: 500;
+  text-align: center;
+  padding: var(--stack-sm) var(--stack-md);
+  border: var(--border-width) solid transparent;
+  display: none;
+  animation: msg-appear 0.2s ease both;
+}
+
+.login-message.visible {
+  display: block;
+}
+
+.login-message.msg--success {
+  background-color: var(--tertiary-fixed);
+  border-color: var(--sage);
+  color: var(--on-surface);
+}
+
+.login-message.msg--error {
+  background-color: var(--error);
+  border-color: var(--error);
+  color: var(--on-primary);
+}
+
+@keyframes msg-appear {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------------
+   14. OR DIVIDER
+   ---------------------------------------------------------------- */
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--stack-md);
+  margin: var(--stack-sm) 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 2px;
+  background-color: var(--primary);
+}
+
+.divider-text {
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+/* ----------------------------------------------------------------
+   15. CONTINUE WITH GOOGLE BUTTON
+   ---------------------------------------------------------------- */
+.btn-google {
+  width: 100%;
+  background-color: var(--surface-container-lowest);
+  color: var(--primary);
+  border: var(--border-width) solid var(--primary);
+  padding: var(--stack-md) var(--stack-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-mono);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--stack-sm);
+  box-shadow: 4px 4px 0 0 var(--ink-navy);
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.btn-google:hover {
+  background-color: var(--surface-container-low);
+}
+
+.btn-google:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--ink-navy);
+}
+
+.btn-google:focus-visible {
+  outline: 3px solid var(--warehouse-amber);
+  outline-offset: 3px;
+}
+
+.google-logo {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* ----------------------------------------------------------------
+   16. SIGNUP LINK ROW
+   ---------------------------------------------------------------- */
+.signup-row {
+  text-align: center;
+  margin-top: var(--stack-sm);
+}
+
+.signup-link {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-mono);
+  font-weight: 500;
+  color: var(--secondary);
+  transition: color var(--transition-fast);
+}
+
+.signup-link:hover,
+.signup-link:focus-visible {
+  color: var(--secondary-container);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  outline: none;
+}
+
+.signup-link strong {
+  font-weight: 700;
+}
+
+/* ----------------------------------------------------------------
+   17. GAUGE STRIP (bottom decorative bar)
+   ---------------------------------------------------------------- */
+.gauge-strip {
+  display: flex;
+  height: 8px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.gauge-segment {
+  flex: 1;
+}
+
+.gauge-segment--sage {
+  background-color: var(--on-tertiary-container);
+}
+
+.gauge-segment--amber {
+  background-color: var(--secondary);
+  border-left: 1px solid var(--primary);
+}
+
+.gauge-segment--rust {
+  background-color: var(--error);
+  border-left: 1px solid var(--primary);
+}
+
+/* ----------------------------------------------------------------
+   18. FOCUS-VISIBLE GLOBAL
+   ---------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--warehouse-amber);
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------------
+   19. RESPONSIVE
+   ---------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .wordmark {
+    font-size: var(--fs-headline-lg);
+  }
+
+  .form-canvas {
+    padding: var(--stack-md);
+  }
+
+  .card-header {
+    padding: var(--stack-md);
+  }
+}

@@ -1,0 +1,770 @@
+/* ================================================================
+   StockWise — Sign-Up Page Stylesheet
+   signup/css/signup.css
+   All color / font / spacing values use CSS custom properties
+   that mirror the variables defined in landing-page/css/landing.css
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   1. DESIGN TOKENS  (identical names to landing.css :root block)
+   ---------------------------------------------------------------- */
+:root {
+  /* -- Brand Colors -- */
+  --ink-navy:           #1c2430;
+  --paper:              #f6f4ef;
+  --warehouse-amber:    #c77d2e;
+  --sage:               #6e9075;
+  --rust-red:           #b5482f;
+  --slate-gray:         #9ca3af;
+
+  /* -- Surface Palette -- */
+  --surface:                    #f8f9ff;
+  --surface-dim:                #d4dae7;
+  --surface-container-lowest:   #ffffff;
+  --surface-container-low:      #eef4ff;
+  --surface-container:          #e7eefb;
+  --surface-container-high:     #e2e8f5;
+  --surface-container-highest:  #dce3f0;
+  --on-surface:                 #151c25;
+  --on-surface-variant:         #45474c;
+  --outline:                    #75777c;
+  --outline-variant:            #c5c6cc;
+
+  /* -- Primary -- */
+  --primary:                    #060e1a;
+  --on-primary:                 #ffffff;
+  --primary-container:          #1c2430;
+  --inverse-primary:            #bfc7d7;
+
+  /* -- Secondary (Amber) -- */
+  --secondary:                  #8c4f00;
+  --on-secondary:               #ffffff;
+  --secondary-container:        #fca956;
+
+  /* -- Tertiary (Green) -- */
+  --tertiary-fixed:             #c7eccc;
+
+  /* -- Error -- */
+  --error:                      #ba1a1a;
+
+  /* -- Typography -- */
+  --font-headline: 'Space Grotesk', sans-serif;
+  --font-body:     'Inter', sans-serif;
+  --font-mono:     'JetBrains Mono', monospace;
+
+  /* Font sizes */
+  --fs-display-lg:   48px;
+  --fs-headline-lg:  32px;
+  --fs-headline-md:  20px;
+  --fs-body-lg:      18px;
+  --fs-body-md:      16px;
+  --fs-data-mono:    14px;
+  --fs-label-caps:   12px;
+
+  /* Line heights */
+  --lh-display:  1.1;
+  --lh-headline: 1.2;
+  --lh-body:     1.5;
+  --lh-mono:     1.4;
+
+  /* -- Spacing (4 px base unit) -- */
+  --unit:           4px;
+  --stack-sm:       8px;
+  --stack-md:       16px;
+  --stack-lg:       32px;
+  --gutter:         16px;
+  --margin-mobile:  16px;
+  --margin-desktop: 32px;
+
+  /* -- Effects -- */
+  --border-width:    2px;
+  --border-width-lg: 4px;
+  --shadow-offset:   4px;
+
+  /* -- Transitions -- */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+}
+
+/* ----------------------------------------------------------------
+   2. RESET & BASE
+   ---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-md);
+  line-height: var(--lh-body);
+  color: var(--on-surface);
+  background-color: var(--surface-container-high);
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--margin-mobile);
+  position: relative;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------
+   3. DOT-GRID BACKDROP
+   ---------------------------------------------------------------- */
+.page-backdrop {
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(21, 28, 37, 0.25) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ----------------------------------------------------------------
+   4. SIGNUP CARD
+   ---------------------------------------------------------------- */
+.signup-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  background-color: var(--paper);
+  border: var(--border-width) solid var(--ink-navy);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 0 var(--ink-navy);
+  display: flex;
+  flex-direction: column;
+  /* room for the bottom gauge strip */
+  padding-bottom: 8px;
+  /* animate in */
+  animation: card-appear 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ----------------------------------------------------------------
+   5. CARD HEADER
+   ---------------------------------------------------------------- */
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--stack-sm);
+  padding: var(--margin-desktop);
+  border-bottom: var(--border-width) solid var(--ink-navy);
+  background-color: var(--surface-container-lowest);
+  text-align: center;
+}
+
+.terminal-label {
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+}
+
+.wordmark-row {
+  display: flex;
+  align-items: center;
+  gap: var(--stack-sm);
+}
+
+.wordmark-icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 1, 'wght' 600;
+  font-size: 32px;
+  color: var(--primary);
+  line-height: 1;
+  display: inline-block;
+}
+
+.wordmark {
+  font-family: var(--font-headline);
+  font-size: clamp(var(--fs-headline-lg), 5vw, var(--fs-display-lg));
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-display);
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.card-subtitle {
+  font-family: var(--font-headline);
+  font-size: var(--fs-headline-md);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+/* ----------------------------------------------------------------
+   6. FORM LAYOUT
+   ---------------------------------------------------------------- */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  padding: var(--margin-desktop);
+  gap: var(--stack-lg);
+}
+
+/* Two-column grid */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gutter);
+}
+
+@media (max-width: 640px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .signup-form {
+    padding: var(--margin-mobile);
+  }
+
+  .card-header {
+    padding: var(--margin-mobile);
+  }
+}
+
+/* ----------------------------------------------------------------
+   7. FIELDSETS / COLUMNS
+   ---------------------------------------------------------------- */
+.detail-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-md);
+}
+
+.col-legend {
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  border-bottom: 1px solid var(--outline);
+  padding-bottom: var(--stack-sm);
+  margin-bottom: var(--stack-sm);
+  width: 100%;
+  display: block;
+}
+
+/* ----------------------------------------------------------------
+   8. FIELD GROUPS & LABELS
+   ---------------------------------------------------------------- */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--unit) * 1);
+  position: relative;
+}
+
+.field-group--full {
+  /* spans below the grid — already full width in flex parent */
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: var(--stack-sm);
+  position: relative;
+}
+
+.field-label {
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--primary);
+  display: block;
+}
+
+.field-label--icon {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--unit) * 1.5);
+}
+
+.label-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 16px;
+  color: var(--primary);
+  line-height: 1;
+  display: inline-block;
+}
+
+/* ----------------------------------------------------------------
+   9. INPUT & SELECT
+   ---------------------------------------------------------------- */
+.field-input {
+  width: 100%;
+  height: 44px;
+  background-color: var(--surface-container-lowest);
+  border: var(--border-width) solid var(--primary);
+  padding: 0 var(--stack-md);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-md);
+  color: var(--on-surface);
+  transition:
+    border-width var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  outline: none;
+  /* Sharp corners — no radius */
+  border-radius: 0;
+}
+
+.field-input::placeholder {
+  color: var(--outline);
+  font-style: normal;
+}
+
+.field-input:focus {
+  border-width: 3px;
+  border-color: var(--ink-navy);
+  box-shadow: 2px 2px 0 0 var(--ink-navy);
+}
+
+/* Error state */
+.field-input.is-invalid {
+  border-color: var(--error);
+}
+
+/* Valid state */
+.field-input.is-valid {
+  border-color: var(--sage);
+}
+
+/* SELECT — remove native arrow */
+.select-wrapper {
+  position: relative;
+}
+
+.field-select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 36px;
+}
+
+.select-chevron {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--primary);
+  font-size: 20px;
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0;
+  line-height: 1;
+}
+
+/* ----------------------------------------------------------------
+   10. PASSWORD FIELD
+   ---------------------------------------------------------------- */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .field-input {
+  padding-right: 44px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--on-surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  transition: color var(--transition-fast);
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+  color: var(--primary);
+  outline: none;
+}
+
+.password-toggle .material-symbols-outlined {
+  font-size: 20px;
+  line-height: 1;
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0;
+  display: inline-block;
+}
+
+/* ----------------------------------------------------------------
+   11. PASSWORD STRENGTH METER
+   ---------------------------------------------------------------- */
+.strength-bar-row {
+  display: flex;
+  gap: 4px;
+  margin-top: var(--unit);
+  height: 4px;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.strength-bar-row.visible {
+  opacity: 1;
+}
+
+.strength-segment {
+  flex: 1;
+  background-color: var(--outline-variant);
+  transition: background-color var(--transition-base);
+}
+
+/* Strength levels fill segments in order */
+.strength-bar-row[data-strength="1"] .strength-segment:nth-child(1) {
+  background-color: var(--error);
+}
+.strength-bar-row[data-strength="2"] .strength-segment:nth-child(-n+2) {
+  background-color: var(--warehouse-amber);
+}
+.strength-bar-row[data-strength="3"] .strength-segment:nth-child(-n+3) {
+  background-color: var(--warehouse-amber);
+}
+.strength-bar-row[data-strength="4"] .strength-segment {
+  background-color: var(--sage);
+}
+
+.strength-label {
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--outline);
+  min-height: 14px;
+  display: block;
+  transition: color var(--transition-base);
+}
+
+.strength-label[data-level="1"] { color: var(--error); }
+.strength-label[data-level="2"] { color: var(--warehouse-amber); }
+.strength-label[data-level="3"] { color: var(--warehouse-amber); }
+.strength-label[data-level="4"] { color: var(--sage); }
+
+/* ----------------------------------------------------------------
+   12. FIELD VALIDATION ERROR
+   ---------------------------------------------------------------- */
+.field-error {
+  font-family: var(--font-body);
+  font-size: var(--fs-label-caps);
+  color: var(--error);
+  min-height: 14px;
+  display: block;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.field-error.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ----------------------------------------------------------------
+   13. TOOLTIP (Business Name info)
+   ---------------------------------------------------------------- */
+.tooltip-anchor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+}
+
+.info-icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 1;
+  font-size: 16px;
+  color: var(--warehouse-amber);
+  line-height: 1;
+  display: inline-block;
+}
+
+.tooltip-bubble {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--on-surface);
+  color: var(--on-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-label-caps);
+  line-height: 1.4;
+  padding: 6px 10px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), visibility var(--transition-fast);
+  z-index: 100;
+}
+
+/* Arrow */
+.tooltip-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--on-surface);
+}
+
+.tooltip-anchor:hover .tooltip-bubble,
+.tooltip-anchor:focus .tooltip-bubble,
+.tooltip-anchor.tooltip-open .tooltip-bubble {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ----------------------------------------------------------------
+   14. FORM FOOTER (divider + CTA + link)
+   ---------------------------------------------------------------- */
+.form-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--stack-md);
+  padding-top: var(--stack-md);
+  border-top: 1px solid var(--outline);
+}
+
+/* REQUEST ACCESS button */
+.btn-request {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--stack-sm);
+  min-width: 220px;
+  padding: 12px 24px;
+  background-color: var(--warehouse-amber);
+  border: var(--border-width) solid var(--ink-navy);
+  box-shadow: 2px 2px 0 0 var(--ink-navy);
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-request:hover {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.btn-request:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+.btn-request:focus-visible {
+  outline: 3px solid var(--warehouse-amber);
+  outline-offset: 3px;
+}
+
+/* Loading spinner state */
+.btn-request.loading .btn-text::after {
+  content: '…';
+}
+
+.btn-request.loading .btn-arrow {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-arrow {
+  font-family: 'Material Symbols Outlined';
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+  font-variation-settings: 'FILL' 0;
+}
+
+/* Log In link */
+.login-link {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-md);
+  color: var(--warehouse-amber);
+  transition: color var(--transition-fast);
+}
+
+.login-link:hover,
+.login-link:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  color: var(--secondary);
+  outline: none;
+}
+
+.login-link strong {
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------------
+   15. DECORATIVE GAUGE STRIP (bottom of card)
+   ---------------------------------------------------------------- */
+.gauge-strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  display: flex;
+  pointer-events: none;
+}
+
+.gauge-segment {
+  flex: 1;
+}
+
+.gauge-segment--sage {
+  background-color: var(--tertiary-fixed);
+  flex: 1;
+}
+
+.gauge-segment--amber {
+  background-color: var(--warehouse-amber);
+  flex: 2;
+}
+
+.gauge-segment--rust {
+  background-color: var(--rust-red);
+  flex: 1;
+}
+
+/* ----------------------------------------------------------------
+   16. TOAST NOTIFICATION
+   ---------------------------------------------------------------- */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  background-color: var(--primary-container);
+  color: var(--on-primary);
+  border: var(--border-width) solid var(--ink-navy);
+  box-shadow: 4px 4px 0 0 var(--ink-navy);
+  padding: var(--stack-md) var(--stack-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--stack-sm);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-md);
+  font-weight: 500;
+  max-width: 360px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base);
+}
+
+.toast.toast--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.toast--success {
+  background-color: var(--tertiary-fixed);
+  color: var(--on-surface);
+  border-color: var(--sage);
+  box-shadow: 4px 4px 0 0 var(--sage);
+}
+
+.toast--error {
+  background-color: var(--error);
+  color: var(--on-primary);
+}
+
+.toast-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 20px;
+  line-height: 1;
+  font-variation-settings: 'FILL' 1;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* ----------------------------------------------------------------
+   17. FOCUS-VISIBLE POLISH (keyboard nav)
+   ---------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--warehouse-amber);
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------------
+   18. RESPONSIVE — mobile tweaks
+   ---------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .wordmark {
+    font-size: var(--fs-headline-lg);
+  }
+
+  .btn-request {
+    width: 100%;
+  }
+}

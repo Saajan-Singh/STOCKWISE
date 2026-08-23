@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StockWise — storage.js Test Runner</title>
+  <style>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #1c2430;
+      color: #f6f4ef;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    h1 { font-size: 1.4rem; color: #c77d2e; letter-spacing: 0.1em; margin-bottom: 8px; }
+    p  { color: #9ca3af; font-size: 0.9rem; line-height: 1.6; max-width: 520px; }
+    .badge {
+      display: inline-block;
+      background: #c77d2e;
+      color: #1c2430;
+      font-weight: 700;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>STOCKWISE — STORAGE.JS TEST RUNNER</h1>
+  <p>Open DevTools → Console to see the test results.<br/>
+     All assertions print <strong style="color:#6e9075">PASS</strong> /
+     <strong style="color:#b5482f">FAIL</strong> with labels.<br/>
+     localStorage is cleaned up automatically after each suite.</p>
+  <div class="badge">CHECK CONSOLE FOR RESULTS</div>
+
+  <!--
+    Load order matters:
+      1. storage.js  — defines the Storage namespace
+      2. storage.test.js — runs immediately after Storage is available
+  -->
+  <script src="../js/storage.js" defer></script>
+  <script src="storage.test.js" defer></script>
+</body>
+</html>

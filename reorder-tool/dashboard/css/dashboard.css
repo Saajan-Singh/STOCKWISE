@@ -1,0 +1,475 @@
+/* ================================================================
+   StockWise — Dashboard Page Stylesheet (Phase 1 placeholder)
+   reorder-tool/dashboard/css/dashboard.css
+   All values use CSS custom properties that mirror
+   landing-page/css/landing.css, signup/css/signup.css, and
+   login/css/login.css — one shared design-token system.
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   1. DESIGN TOKENS  (identical names to the rest of the project)
+   ---------------------------------------------------------------- */
+:root {
+  /* -- Brand Colors -- */
+  --ink-navy:        #1c2430;
+  --paper:           #f6f4ef;
+  --warehouse-amber: #c77d2e;
+  --sage:            #6e9075;
+  --rust-red:        #b5482f;
+  --slate-gray:      #9ca3af;
+
+  /* -- Surface Palette -- */
+  --surface:                   #f8f9ff;
+  --surface-dim:               #d4dae7;
+  --surface-container-lowest:  #ffffff;
+  --surface-container-low:     #eef4ff;
+  --surface-container:         #e7eefb;
+  --surface-container-high:    #e2e8f5;
+  --on-surface:                #151c25;
+  --on-surface-variant:        #45474c;
+  --outline:                   #75777c;
+  --outline-variant:           #c5c6cc;
+
+  /* -- Primary -- */
+  --primary:           #060e1a;
+  --on-primary:        #ffffff;
+  --primary-container: #1c2430;
+
+  /* -- Secondary (Amber) -- */
+  --secondary:           #8c4f00;
+  --on-secondary:        #ffffff;
+  --secondary-container: #fca956;
+
+  /* -- Tertiary -- */
+  --tertiary-fixed:        #c7eccc;
+  --on-tertiary-container: #709377;
+
+  /* -- Error -- */
+  --error: #ba1a1a;
+
+  /* -- Typography -- */
+  --font-headline: 'Space Grotesk', sans-serif;
+  --font-body:     'Inter', sans-serif;
+  --font-mono:     'JetBrains Mono', monospace;
+
+  --fs-display-lg:  48px;
+  --fs-headline-lg: 32px;
+  --fs-headline-md: 20px;
+  --fs-body-lg:     18px;
+  --fs-body-md:     16px;
+  --fs-data-mono:   14px;
+  --fs-label-caps:  12px;
+
+  --lh-display:  1.1;
+  --lh-headline: 1.2;
+  --lh-body:     1.5;
+  --lh-mono:     1.4;
+
+  /* -- Spacing -- */
+  --unit:           4px;
+  --stack-sm:       8px;
+  --stack-md:       16px;
+  --stack-lg:       32px;
+  --gutter:         16px;
+  --margin-mobile:  16px;
+  --margin-desktop: 32px;
+
+  /* -- Effects -- */
+  --border-width: 2px;
+  --shadow-hard:  4px 4px 0 0 var(--ink-navy);
+
+  /* -- Transitions -- */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+}
+
+/* ----------------------------------------------------------------
+   2. RESET & BASE
+   ---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-md);
+  line-height: var(--lh-body);
+  color: var(--on-surface);
+  /* Dot-grid background matching the rest of the app */
+  background-color: var(--surface-container-high);
+  background-image: radial-gradient(var(--surface-dim) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+/* ----------------------------------------------------------------
+   3. NAVBAR
+   ---------------------------------------------------------------- */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--stack-md) var(--margin-desktop);
+  background-color: var(--ink-navy);
+  border-bottom: var(--border-width) solid var(--primary);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: var(--stack-md) var(--margin-mobile);
+  }
+}
+
+/* Brand / wordmark */
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--stack-sm);
+}
+
+.navbar__icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 1, 'wght' 600;
+  font-size: 28px;
+  color: var(--warehouse-amber);
+  line-height: 1;
+  display: inline-block;
+}
+
+.navbar__wordmark {
+  font-family: var(--font-headline);
+  font-size: var(--fs-headline-md);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--on-primary);
+}
+
+/* Right side of navbar */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--stack-md);
+}
+
+.navbar__user-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-caps);
+  font-weight: 500;
+  color: var(--slate-gray);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+/* Log Out button */
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--unit);
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--on-primary);
+  border: var(--border-width) solid var(--outline-variant);
+  padding: var(--unit) var(--stack-md);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn-logout:hover,
+.btn-logout:focus-visible {
+  background-color: var(--warehouse-amber);
+  border-color: var(--warehouse-amber);
+  color: var(--primary);
+  outline: none;
+}
+
+.btn-logout__icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0;
+  font-size: 16px;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* ----------------------------------------------------------------
+   4. MAIN CONTENT AREA
+   ---------------------------------------------------------------- */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--stack-lg) var(--margin-desktop);
+  gap: var(--stack-lg);
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: var(--stack-lg) var(--margin-mobile);
+  }
+}
+
+/* ----------------------------------------------------------------
+   5. WELCOME SECTION
+   ---------------------------------------------------------------- */
+.welcome-section {
+  width: 100%;
+  max-width: 720px;
+  background-color: var(--surface-container-lowest);
+  border: var(--border-width) solid var(--ink-navy);
+  box-shadow: var(--shadow-hard);
+  padding: var(--stack-lg) var(--margin-desktop);
+  display: none; /* shown via JS when session exists */
+  flex-direction: column;
+  gap: var(--stack-sm);
+  animation: section-appear 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.welcome-section.visible {
+  display: flex;
+}
+
+.welcome-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--unit);
+}
+
+.welcome-eyebrow__icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 1;
+  font-size: 16px;
+  color: var(--warehouse-amber);
+  line-height: 1;
+  display: inline-block;
+}
+
+.welcome-eyebrow__text {
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+}
+
+.welcome-heading {
+  font-family: var(--font-headline);
+  font-size: clamp(var(--fs-headline-lg), 5vw, var(--fs-display-lg));
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-display);
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.welcome-biz {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-mono);
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-top: 1px solid var(--outline-variant);
+  padding-top: var(--stack-sm);
+  margin-top: var(--stack-sm);
+}
+
+/* ----------------------------------------------------------------
+   6. NO-SESSION FALLBACK
+   ---------------------------------------------------------------- */
+.no-session-section {
+  width: 100%;
+  max-width: 480px;
+  background-color: var(--surface-container-lowest);
+  border: var(--border-width) solid var(--ink-navy);
+  box-shadow: var(--shadow-hard);
+  padding: var(--stack-lg) var(--margin-desktop);
+  display: none; /* shown via JS when no session */
+  flex-direction: column;
+  align-items: center;
+  gap: var(--stack-md);
+  text-align: center;
+  animation: section-appear 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.no-session-section.visible {
+  display: flex;
+}
+
+.no-session__icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0;
+  font-size: 48px;
+  color: var(--outline);
+  line-height: 1;
+  display: inline-block;
+}
+
+.no-session__heading {
+  font-family: var(--font-headline);
+  font-size: var(--fs-headline-md);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.no-session__body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-md);
+  color: var(--on-surface-variant);
+}
+
+.btn-go-login {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stack-sm);
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--on-primary);
+  background-color: var(--ink-navy);
+  border: var(--border-width) solid var(--ink-navy);
+  box-shadow: var(--shadow-hard);
+  padding: var(--stack-sm) var(--stack-lg);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.btn-go-login:hover,
+.btn-go-login:focus-visible {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--ink-navy);
+  outline: none;
+}
+
+.btn-go-login .material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-size: 16px;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* ----------------------------------------------------------------
+   7. PHASE-2 PLACEHOLDER CARD
+   ---------------------------------------------------------------- */
+.phase2-card {
+  width: 100%;
+  max-width: 720px;
+  background-color: var(--paper);
+  border: var(--border-width) dashed var(--outline);
+  padding: var(--stack-lg) var(--margin-desktop);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--stack-sm);
+  text-align: center;
+  animation: section-appear 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.phase2-card__icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0;
+  font-size: 40px;
+  color: var(--outline);
+  line-height: 1;
+  display: inline-block;
+}
+
+.phase2-card__label {
+  font-family: var(--font-headline);
+  font-size: var(--fs-label-caps);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--warehouse-amber);
+}
+
+.phase2-card__message {
+  font-family: var(--font-headline);
+  font-size: var(--fs-headline-md);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--on-surface);
+}
+
+.phase2-card__sub {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-mono);
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  letter-spacing: 0.03em;
+}
+
+/* ----------------------------------------------------------------
+   8. GAUGE STRIP (bottom decorative bar — matches login & signup)
+   ---------------------------------------------------------------- */
+.gauge-strip {
+  display: flex;
+  height: 8px;
+  width: 100%;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.gauge-segment       { flex: 1; }
+.gauge-segment--sage  { background-color: var(--on-tertiary-container, #709377); }
+.gauge-segment--amber { background-color: var(--secondary);  border-left: 1px solid var(--primary); }
+.gauge-segment--rust  { background-color: var(--error);      border-left: 1px solid var(--primary); }
+
+/* ----------------------------------------------------------------
+   9. ANIMATION
+   ---------------------------------------------------------------- */
+@keyframes section-appear {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ----------------------------------------------------------------
+   10. FOCUS-VISIBLE GLOBAL
+   ---------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--warehouse-amber);
+  outline-offset: 2px;
+}
