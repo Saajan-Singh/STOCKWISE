@@ -36,10 +36,14 @@
   /* ----------------------------------------------------------------
      Utility: show / hide field errors
      ---------------------------------------------------------------- */
-  function setError(inputEl, errorId, message) {
+  function setError(inputEl, errorId, message, isHtml) {
     var errorEl = document.getElementById(errorId);
     if (!errorEl) return;
-    errorEl.textContent = message;
+    if (isHtml) {
+      errorEl.innerHTML = message;
+    } else {
+      errorEl.textContent = message;
+    }
     if (message) {
       errorEl.classList.add('visible');
       inputEl.classList.add('is-invalid');
@@ -283,6 +287,19 @@
       return;
     }
 
+    var emailVal = emailInput.value.trim();
+    if (window.Storage && Storage.findUserByEmail(emailVal)) {
+      var loginUrl = '../login/index.html?email=' + encodeURIComponent(emailVal);
+      setError(
+        emailInput,
+        'work-email-error',
+        'An account with this email already exists. <a href="' + loginUrl + '" style="text-decoration: underline; color: inherit;">Log In Instead</a>',
+        true
+      );
+      emailInput.focus();
+      return;
+    }
+
     /* Simulate async submission */
     submitBtn.classList.add('loading');
     submitBtn.setAttribute('disabled', 'true');
@@ -291,11 +308,16 @@
       submitBtn.classList.remove('loading');
       submitBtn.removeAttribute('disabled');
 
-      /* ── Temporary Phase-1 session stand-in ──────────────────────
-         Write the owner name and business name into localStorage so
-         that dashboard/index.html can display them immediately after
-         sign-up.  In Phase 2 these will be replaced by a real
-         backend session token — remove these two lines then.      */
+      /* ── Temporary Phase-1 session stand-in ────────────────────── */
+      if (window.Storage) {
+        Storage.addUser({
+          fullName: fullNameInput.value.trim(),
+          businessName: bizNameInput.value.trim(),
+          email: emailVal,
+          password: passwordInput.value
+        });
+      }
+
       try {
         localStorage.setItem('loggedInOwnerName',    fullNameInput.value.trim());
         localStorage.setItem('loggedInBusinessName', bizNameInput.value.trim());

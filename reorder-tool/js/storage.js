@@ -57,6 +57,9 @@ var ITEMS_KEY = 'inventory_items';
 /** @type {string} */
 var SALES_KEY = 'sales_log';
 
+/** @type {string} */
+var USERS_KEY = 'registered_users';
+
 /* ================================================================
    INTERNAL HELPERS
    ================================================================ */
@@ -356,6 +359,69 @@ function getSalesForItem(itemId) {
 }
 
 /* ================================================================
+   USERS API (Phase 1 Auth Placeholder)
+   ================================================================ */
+
+/**
+ * Return the full registered_users array.
+ * Always returns an Array (never undefined, never throws).
+ *
+ * @returns {User[]}
+ */
+function getUsers() {
+  return safeRead(USERS_KEY);
+}
+
+/**
+ * Overwrite the entire registered_users array in localStorage.
+ *
+ * @param {User[]} users
+ */
+function saveUsers(users) {
+  safeWrite(USERS_KEY, users);
+}
+
+/**
+ * Find a user by their email address (case-insensitive).
+ *
+ * @param {string} email
+ * @returns {User|null}
+ */
+function findUserByEmail(email) {
+  var users = getUsers();
+  var lowerEmail = email.toLowerCase();
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].email.toLowerCase() === lowerEmail) {
+      return users[i];
+    }
+  }
+  return null;
+}
+
+/**
+ * Add a new user to the registered_users array.
+ * Note: storing plaintext passwords in localStorage is NOT secure and is only
+ * acceptable as a temporary Phase 1 placeholder — real authentication
+ * (hashed passwords, real backend, sessions) will be built in Phase 2.
+ *
+ * @param {Partial<User>} user
+ * @returns {User} The saved user including its generated id.
+ */
+function addUser(user) {
+  var users = getUsers();
+
+  var newUser = Object.assign({}, user, {
+    id:        user.id        || 'usr_' + Date.now() + '_' + randomSuffix(),
+    createdAt: user.createdAt || new Date().toISOString()
+  });
+
+  users.push(newUser);
+  saveUsers(users);
+
+  return newUser;
+}
+
+/* ================================================================
    UTILITY — LOCAL DATE STRING
    ================================================================ */
 
@@ -396,6 +462,12 @@ var Storage = {
   saveSales:       saveSales,
   addSale:         addSale,
   getSalesForItem: getSalesForItem,
+
+  /* Users */
+  getUsers:        getUsers,
+  saveUsers:       saveUsers,
+  findUserByEmail: findUserByEmail,
+  addUser:         addUser,
 
   /* Utility */
   todayDateString: todayDateString

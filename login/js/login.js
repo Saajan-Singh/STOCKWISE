@@ -157,6 +157,29 @@
       remember: rememberBox.checked
     };
 
+    /* Check user against Storage (Phase 1 Auth) */
+    var user = null;
+    if (window.Storage) {
+      user = Storage.findUserByEmail(formData.email);
+      if (!user) {
+        setError(emailInput, 'email-error', 'No account found with this email. Try signing up instead.');
+        emailInput.focus();
+        return;
+      }
+      if (user.password !== formData.password) {
+        setError(passwordInput, 'password-error', 'Incorrect password. Please try again.');
+        passwordInput.focus();
+        return;
+      }
+      
+      try {
+        localStorage.setItem('loggedInOwnerName', user.fullName);
+        localStorage.setItem('loggedInBusinessName', user.businessName);
+      } catch (lsErr) {
+        console.warn('[StockWise:login] Could not write session to localStorage.', lsErr);
+      }
+    }
+
     console.log('[StockWise] Login form submitted:', {
       email:    formData.email,
       remember: formData.remember,
@@ -187,5 +210,16 @@
     console.log('[StockWise] Google OAuth flow triggered (not yet wired — add real OAuth here).');
     showMessage('Google sign-in not yet connected.', 'error');
   });
+
+  /* ----------------------------------------------------------------
+     Pre-fill email from URL if provided (e.g. redirected from signup)
+     ---------------------------------------------------------------- */
+  var urlParams = new URLSearchParams(window.location.search);
+  var emailParam = urlParams.get('email');
+  if (emailParam) {
+    emailInput.value = emailParam;
+    /* Move focus to password since email is pre-filled */
+    passwordInput.focus();
+  }
 
 })();
