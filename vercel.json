@@ -2,9 +2,6 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/login", "destination": "/login/index.html" },
-    { "source": "/signup", "destination": "/signup/index.html" },
-    { "source": "/dashboard", "destination": "/dashboard/index.html" }
+    { "source": "/", "destination": "/landing-page/index.html" }
   ]
 }

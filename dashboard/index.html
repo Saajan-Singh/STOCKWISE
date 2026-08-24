@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="StockWise — Inventory reorder dashboard for your warehouse." />
+  <meta name="description" content="StockWise — Inventory reorder dashboard. Track stock levels, demand forecasts, and reorder points in real time." />
   <title>Dashboard — StockWise</title>
 
   <!-- Google Fonts -->
@@ -19,7 +19,7 @@
     rel="stylesheet"
   />
 
-  <link rel="stylesheet" href="/dashboard/css/dashboard.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
 </head>
 <body>
 
@@ -30,56 +30,283 @@
       <span class="navbar__wordmark">STOCKWISE</span>
     </div>
 
-    <nav class="navbar__actions" aria-label="User actions">
+    <nav class="navbar__actions" aria-label="Dashboard actions">
+      <!-- Action buttons -->
+      <button class="btn-action" id="btn-open-add-item" type="button">
+        <span class="material-symbols-outlined" aria-hidden="true">add</span>
+        <span>Add Item</span>
+      </button>
+      <button class="btn-action" id="btn-open-log-sale" type="button">
+        <span class="material-symbols-outlined" aria-hidden="true">add_shopping_cart</span>
+        <span>Log Sale</span>
+      </button>
+
+      <div class="navbar__divider" aria-hidden="true"></div>
+
       <span class="navbar__user-label" id="navbar-user-label" aria-live="polite"></span>
-      <a class="btn-logout" href="/login" id="btn-logout">
+      <a class="btn-logout" href="../login/" id="btn-logout">
         <span class="material-symbols-outlined btn-logout__icon" aria-hidden="true">logout</span>
         Log Out
       </a>
     </nav>
   </header>
 
-  <!-- ── MAIN CONTENT ── -->
-  <main class="main-content" id="main-content">
+  <!-- ── LAYOUT: SIDEBAR + MAIN ── -->
+  <div class="dashboard-layout">
 
-    <!-- Welcome section (shown when session data exists) -->
-    <section class="welcome-section" id="welcome-section" aria-label="Welcome">
-      <div class="welcome-eyebrow">
-        <span class="material-symbols-outlined welcome-eyebrow__icon" aria-hidden="true">waving_hand</span>
-        <span class="welcome-eyebrow__text">GOOD TO SEE YOU</span>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" aria-label="Dashboard navigation">
+      <div class="sidebar__header">
+        <h2 class="sidebar__title" id="welcome-heading">Inventory Ops</h2>
+        <p class="sidebar__subtitle" id="welcome-biz"></p>
       </div>
-      <h1 class="welcome-heading" id="welcome-heading">Welcome back</h1>
-      <p class="welcome-biz" id="welcome-biz"></p>
-    </section>
 
-    <!-- No-session fallback (shown when localStorage has no session data) -->
-    <section class="no-session-section" id="no-session-section" aria-label="No active session">
-      <span class="material-symbols-outlined no-session__icon" aria-hidden="true">lock</span>
-      <h1 class="no-session__heading">No active session</h1>
-      <p class="no-session__body">Please log in to access your dashboard.</p>
-      <a class="btn-go-login" href="/login" id="btn-go-login">
-        <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-        Go to Login
-      </a>
-    </section>
+      <ul class="sidebar__nav">
+        <li>
+          <a class="sidebar__link sidebar__link--active" href="#" aria-current="page">
+            <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a class="sidebar__link" href="#">
+            <span class="material-symbols-outlined" aria-hidden="true">inventory_2</span>
+            Inventory
+          </a>
+        </li>
+        <li>
+          <a class="sidebar__link" href="#">
+            <span class="material-symbols-outlined" aria-hidden="true">local_shipping</span>
+            Shipments
+          </a>
+        </li>
+        <li>
+          <a class="sidebar__link" href="#">
+            <span class="material-symbols-outlined" aria-hidden="true">analytics</span>
+            Reports
+          </a>
+        </li>
+      </ul>
+    </nav>
 
-    <!-- Phase-2 placeholder card -->
-    <div class="phase2-card" id="phase2-card" aria-label="Coming soon">
-      <span class="material-symbols-outlined phase2-card__icon" aria-hidden="true">construction</span>
-      <p class="phase2-card__label">PHASE 2</p>
-      <p class="phase2-card__message">Full inventory dashboard coming in Phase 2</p>
-      <p class="phase2-card__sub">Stock gauges · Reorder flags · Sales log · Forecast engine</p>
-    </div>
+    <!-- Main Content Area -->
+    <main class="dashboard-main" role="main">
 
-  </main>
+      <!-- No-session fallback (shown when no localStorage session data) -->
+      <section class="no-session-section" id="no-session-section" aria-label="No active session">
+        <span class="material-symbols-outlined no-session__icon" aria-hidden="true">lock</span>
+        <h1 class="no-session__heading">No active session</h1>
+        <p class="no-session__body">Please log in to access your dashboard.</p>
+        <a class="btn-go-login" href="../login/" id="btn-go-login">
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+          Go to Login
+        </a>
+      </section>
 
-  <!-- ── FOOTER GAUGE STRIP (decorative) ── -->
+      <!-- Dashboard content (hidden when no session) -->
+      <div class="dashboard-main__inner" id="dashboard-content">
+
+        <!-- Welcome bar -->
+        <section class="welcome-section" id="welcome-section" aria-label="Welcome">
+          <div class="welcome-eyebrow">
+            <span class="material-symbols-outlined welcome-eyebrow__icon" aria-hidden="true">waving_hand</span>
+            <span class="welcome-eyebrow__text">GOOD TO SEE YOU</span>
+          </div>
+          <!-- welcome-heading is the sidebar title (handled via JS) -->
+        </section>
+
+        <!-- ── STAT TILES ── -->
+        <section class="stat-tiles" aria-label="Inventory statistics">
+          <!-- Total Inventory Items -->
+          <div class="cargo-tag">
+            <div class="cargo-tag__inner">
+              <h3 class="stat-tile__label">Total Inventory Items</h3>
+              <div class="stat-tile__body">
+                <span class="stat-tile__value" id="stat-total">0</span>
+                <span class="material-symbols-outlined stat-tile__icon stat-tile__icon--default" aria-hidden="true">inventory_2</span>
+              </div>
+            </div>
+          </div>
+          <!-- Items Needing Reorder -->
+          <div class="cargo-tag">
+            <div class="cargo-tag__inner">
+              <h3 class="stat-tile__label">Items Needing Reorder</h3>
+              <div class="stat-tile__body">
+                <span class="stat-tile__value stat-tile__value--amber" id="stat-reorder">0</span>
+                <span class="material-symbols-outlined stat-tile__icon stat-tile__icon--amber" aria-hidden="true">shopping_cart</span>
+              </div>
+            </div>
+          </div>
+          <!-- Critical Stock Level -->
+          <div class="cargo-tag">
+            <div class="cargo-tag__inner">
+              <h3 class="stat-tile__label">Critical Stock Level</h3>
+              <div class="stat-tile__body">
+                <span class="stat-tile__value stat-tile__value--red" id="stat-critical">0</span>
+                <span class="material-symbols-outlined stat-tile__icon stat-tile__icon--red" aria-hidden="true">warning</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── INVENTORY TABLE ── -->
+        <section class="inventory-section" aria-label="Active inventory">
+          <header class="inventory-section__header">
+            <h2 class="inventory-section__title">Active Inventory</h2>
+          </header>
+
+          <div class="inv-table-wrap">
+            <table class="inv-table">
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>SKU</th>
+                  <th>Stock</th>
+                  <th>Avg Demand</th>
+                  <th>ROP</th>
+                  <th>Stock Position</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-tbody">
+                <!-- Rows rendered by dashboard.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty state (zero items) -->
+          <div class="empty-state" id="empty-state" style="display: none;">
+            <span class="material-symbols-outlined empty-state__icon" aria-hidden="true">package_2</span>
+            <h3 class="empty-state__heading">No items yet</h3>
+            <p class="empty-state__body">Add your first inventory item to start tracking stock levels and reorder points.</p>
+            <button class="empty-state__btn" id="btn-empty-add" type="button">
+              <span class="material-symbols-outlined" aria-hidden="true">add</span>
+              Add First Item
+            </button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ── FOOTER GAUGE STRIP ── -->
   <div class="gauge-strip" aria-hidden="true">
     <div class="gauge-segment gauge-segment--sage"></div>
     <div class="gauge-segment gauge-segment--amber"></div>
     <div class="gauge-segment gauge-segment--rust"></div>
   </div>
 
-  <script src="/dashboard/js/dashboard.js" defer></script>
+  <!-- ════════════════════════════════════════════════════════════
+       MODAL: ADD ITEM
+       ════════════════════════════════════════════════════════════ -->
+  <div class="modal-backdrop" id="modal-add-item" role="dialog" aria-modal="true" aria-labelledby="modal-add-item-title">
+    <div class="modal-card">
+      <div class="modal-card__header">
+        <h2 class="modal-card__title" id="modal-add-item-title">Add Inventory Item</h2>
+        <button class="modal-card__close" id="btn-close-add-item" type="button" aria-label="Close">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+      </div>
+      <form class="modal-card__body" id="add-item-form" novalidate>
+        <div class="modal-field">
+          <label class="modal-field__label" for="item-name">Item Name</label>
+          <input class="modal-field__input" type="text" id="item-name" name="item-name" placeholder="e.g. Organic Coffee Beans" required />
+        </div>
+        <div class="modal-field">
+          <label class="modal-field__label" for="item-sku">SKU</label>
+          <input class="modal-field__input" type="text" id="item-sku" name="item-sku" placeholder="e.g. COF-ORG-01" required />
+        </div>
+        <div class="modal-field-row">
+          <div class="modal-field">
+            <label class="modal-field__label" for="item-stock">Starting Stock</label>
+            <input class="modal-field__input" type="number" id="item-stock" name="item-stock" placeholder="100" min="0" required />
+          </div>
+          <div class="modal-field">
+            <label class="modal-field__label" for="item-lead">Lead Time (days)</label>
+            <input class="modal-field__input" type="number" id="item-lead" name="item-lead" placeholder="7" min="0" required />
+          </div>
+        </div>
+        <div class="modal-field-row">
+          <div class="modal-field">
+            <label class="modal-field__label" for="item-safety">Safety Stock</label>
+            <input class="modal-field__input" type="number" id="item-safety" name="item-safety" placeholder="20" min="0" required />
+          </div>
+          <div class="modal-field">
+            <label class="modal-field__label" for="item-reorder-qty">Reorder Qty</label>
+            <input class="modal-field__input" type="number" id="item-reorder-qty" name="item-reorder-qty" placeholder="50" min="0" />
+          </div>
+        </div>
+        <div class="modal-error" id="add-item-error" role="alert"></div>
+        <button class="modal-submit" type="submit">
+          <span class="material-symbols-outlined" aria-hidden="true">add</span>
+          Add Item
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       MODAL: LOG SALE
+       ════════════════════════════════════════════════════════════ -->
+  <div class="modal-backdrop" id="modal-log-sale" role="dialog" aria-modal="true" aria-labelledby="modal-log-sale-title">
+    <div class="modal-card">
+      <div class="modal-card__header">
+        <h2 class="modal-card__title" id="modal-log-sale-title">Log a Sale</h2>
+        <button class="modal-card__close" id="btn-close-log-sale" type="button" aria-label="Close">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+      </div>
+      <form class="modal-card__body" id="log-sale-form" novalidate>
+        <div class="modal-field">
+          <label class="modal-field__label" for="sale-item-id">Item</label>
+          <select class="modal-field__select" id="sale-item-id" name="sale-item-id" required>
+            <option value="" disabled selected>Select Item</option>
+          </select>
+        </div>
+        <div class="modal-field-row">
+          <div class="modal-field">
+            <label class="modal-field__label" for="sale-qty">Quantity Sold</label>
+            <input class="modal-field__input" type="number" id="sale-qty" name="sale-qty" placeholder="10" min="1" required />
+          </div>
+          <div class="modal-field">
+            <label class="modal-field__label" for="sale-date">Date</label>
+            <input class="modal-field__input" type="date" id="sale-date" name="sale-date" required />
+          </div>
+        </div>
+        <div class="modal-error" id="log-sale-error" role="alert"></div>
+        <button class="modal-submit" type="submit">
+          <span class="material-symbols-outlined" aria-hidden="true">add_shopping_cart</span>
+          Log Sale
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts — order matters: storage first, then modules, then dashboard -->
+  <script src="../reorder-tool/js/storage.js" defer></script>
+  <script src="js/forecast.js" defer></script>
+  <script src="js/items.js" defer></script>
+  <script src="js/sales.js" defer></script>
+  <script src="js/dashboard.js" defer></script>
+
+  <!-- Wire the empty-state "Add First Item" button after dashboard.js loads -->
+  <script defer>
+    document.addEventListener('DOMContentLoaded', function () {
+      var emptyAdd = document.getElementById('btn-empty-add');
+      var addModal = document.getElementById('modal-add-item');
+      if (emptyAdd && addModal) {
+        emptyAdd.addEventListener('click', function () {
+          addModal.classList.add('is-open');
+          var form = document.getElementById('add-item-form');
+          if (form) form.reset();
+          var err = document.getElementById('add-item-error');
+          if (err) err.textContent = '';
+        });
+      }
+    });
+  </script>
+
 </body>
 </html>

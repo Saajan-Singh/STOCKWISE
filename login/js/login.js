@@ -198,7 +198,7 @@
 
       showMessage('Clock in successful. Redirecting...', 'success');
       setTimeout(function() {
-        window.location.href = '../dashboard/index.html';
+        window.location.href = '../dashboard/';
       }, 800);
     }, 900);
   });

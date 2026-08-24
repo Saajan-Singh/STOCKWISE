@@ -289,7 +289,7 @@
 
     var emailVal = emailInput.value.trim();
     if (window.Storage && Storage.findUserByEmail(emailVal)) {
-      var loginUrl = '../login/index.html?email=' + encodeURIComponent(emailVal);
+      var loginUrl = '../login/?email=' + encodeURIComponent(emailVal);
       setError(
         emailInput,
         'work-email-error',
@@ -330,7 +330,7 @@
       showToast('Access request submitted! Redirecting...', 'success');
       
       setTimeout(function() {
-        window.location.href = '../dashboard/index.html';
+        window.location.href = '../dashboard/';
       }, 1200);
 
       form.reset();
