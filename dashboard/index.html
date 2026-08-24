@@ -19,7 +19,7 @@
     rel="stylesheet"
   />
 
-  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="/dashboard/css/dashboard.css" />
 </head>
 <body>
 
@@ -32,7 +32,7 @@
 
     <nav class="navbar__actions" aria-label="User actions">
       <span class="navbar__user-label" id="navbar-user-label" aria-live="polite"></span>
-      <a class="btn-logout" href="../login/index.html" id="btn-logout">
+      <a class="btn-logout" href="/login" id="btn-logout">
         <span class="material-symbols-outlined btn-logout__icon" aria-hidden="true">logout</span>
         Log Out
       </a>
@@ -57,7 +57,7 @@
       <span class="material-symbols-outlined no-session__icon" aria-hidden="true">lock</span>
       <h1 class="no-session__heading">No active session</h1>
       <p class="no-session__body">Please log in to access your dashboard.</p>
-      <a class="btn-go-login" href="../login/index.html" id="btn-go-login">
+      <a class="btn-go-login" href="/login" id="btn-go-login">
         <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
         Go to Login
       </a>
@@ -80,6 +80,6 @@
     <div class="gauge-segment gauge-segment--rust"></div>
   </div>
 
-  <script src="js/dashboard.js" defer></script>
+  <script src="/dashboard/js/dashboard.js" defer></script>
 </body>
 </html>
