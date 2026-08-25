@@ -35,7 +35,7 @@
   }
 
   /* ── DOM: session-dependent elements ── */
-  var welcomeSection   = document.getElementById('welcome-section');
+  // var welcomeSection   = document.getElementById('welcome-section'); // Removed
   var noSessionSection = document.getElementById('no-session-section');
   var welcomeHeading   = document.getElementById('welcome-heading');
   var welcomeBiz       = document.getElementById('welcome-biz');
@@ -46,11 +46,11 @@
     welcomeHeading.textContent = 'Welcome back, ' + ownerName;
     welcomeBiz.textContent     = bizName + ' — Dashboard';
     navbarUserLabel.textContent = ownerName;
-    welcomeSection.classList.add('visible');
+    // welcomeSection.classList.add('visible');
     noSessionSection.classList.remove('visible');
     if (dashboardContent) dashboardContent.style.display = '';
   } else {
-    welcomeSection.classList.remove('visible');
+    // welcomeSection.classList.remove('visible');
     noSessionSection.classList.add('visible');
     navbarUserLabel.textContent = '';
     if (dashboardContent) dashboardContent.style.display = 'none';
