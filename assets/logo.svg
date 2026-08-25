@@ -1,27 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" width="320" height="64">
   <!-- Icon Group -->
-  <g transform="translate(12, 6)">
-    <!-- Wireframe Box (Warehouse Amber) -->
+  <g transform="translate(12, 4)">
+    <!-- 1. Inner Back Walls (gives the 3D open container look) -->
+    <path d="M 4 20 L 24 8 L 24 32 Z" fill="#8c4f00" />
+    <path d="M 24 8 L 44 20 L 24 32 Z" fill="#9e5a00" />
     
-    <!-- Back/Inner edges (lower opacity for depth) -->
-    <path d="M 4 36 L 24 24 L 44 36 M 24 24 L 24 4" fill="none" stroke="#C77D2E" stroke-width="2.5" stroke-linejoin="round" opacity="0.4"/>
+    <!-- 2. Outer Left Face (Solid Amber, slightly darker for depth) -->
+    <path d="M 4 20 L 24 32 L 24 56 L 4 44 Z" fill="#b06b24" />
     
-    <!-- Top opening edges -->
-    <path d="M 24 4 L 4 16 L 24 28 L 44 16 Z" fill="none" stroke="#C77D2E" stroke-width="2.5" stroke-linejoin="round"/>
+    <!-- 3. Outer Right Face (Solid Amber) -->
+    <path d="M 24 32 L 44 20 L 44 44 L 24 56 Z" fill="#C77D2E" />
     
-    <!-- Front and Side edges -->
-    <path d="M 4 16 L 4 36 L 24 48 L 44 36 L 44 16 M 24 28 L 24 48" fill="none" stroke="#C77D2E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- 4. Box Edges (Amber Strokes for definition) -->
+    <path d="M 4 20 L 24 32 L 44 20 M 24 32 L 24 56" fill="none" stroke="#e8a055" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 4 20 L 24 8 L 44 20" fill="none" stroke="#C77D2E" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 4 20 L 4 44 L 24 56 L 44 44 L 44 20" fill="none" stroke="#C77D2E" stroke-width="2" stroke-linejoin="round"/>
 
-    <!-- Arrow (Ink Navy) pointing up and out -->
-    <!-- Path curving from bottom-left inside toward top-right -->
-    <path d="M 10 34 Q 22 34, 32 14" fill="none" stroke="#1C2430" stroke-width="5" stroke-linecap="round"/>
-    <!-- Arrowhead pointing up-right -->
-    <polygon points="38,6 26,12 32,14 36,20" fill="#1C2430"/>
+    <!-- 5. Bold Arrow with Sharp Right-Angle Corner (Ink Navy #1C2430) -->
+    <!-- White Halo Base -->
+    <path d="M 14 42 L 14 27 L 22 22" fill="none" stroke="#FFFFFF" stroke-width="11" stroke-linecap="round" stroke-linejoin="miter"/>
+    <polygon points="34,14 27,29 22,22 17,15" fill="#1C2430" stroke="#FFFFFF" stroke-width="3.5" stroke-linejoin="miter" paint-order="stroke fill"/>
+    
+    <!-- Core Arrow -->
+    <path d="M 14 42 L 14 27 L 22 22" fill="none" stroke="#1C2430" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="miter"/>
+    <polygon points="34,14 27,29 22,22 17,15" fill="#1C2430"/>
   </g>
 
-  <!-- Wordmark -->
-  <!-- Two visual weights in Warehouse Amber -->
-  <text x="68" y="42" font-family="'Inter', sans-serif" font-size="34" fill="#C77D2E" letter-spacing="-0.02em">
+  <!-- Wordmark: Two weights in Warehouse Amber -->
+  <text x="68" y="44" font-family="'Inter', sans-serif" font-size="36" fill="#C77D2E" letter-spacing="-0.02em">
     <tspan font-weight="800">STOCK</tspan><tspan font-weight="300">WISE</tspan>
   </text>
 </svg>
