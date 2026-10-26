@@ -122,7 +122,7 @@ function initSmoothScroll() {
   const finalCTABtn = document.getElementById('final-cta-btn');
   if (finalCTABtn) {
     finalCTABtn.addEventListener('click', () => {
-      window.location.href = 'signup/';
+      window.location.href = '/signup/';
     });
   }
 
@@ -130,7 +130,7 @@ function initSmoothScroll() {
   const heroCTAPrimary = document.getElementById('hero-cta-primary');
   if (heroCTAPrimary) {
     heroCTAPrimary.addEventListener('click', () => {
-      window.location.href = 'signup/';
+      window.location.href = '/signup/';
     });
   }
 
@@ -138,21 +138,21 @@ function initSmoothScroll() {
   const btnFreePlan = document.getElementById('btn-free-plan');
   if (btnFreePlan) {
     btnFreePlan.addEventListener('click', () => {
-      window.location.href = 'signup/';
+      window.location.href = '/signup/';
     });
   }
   const btnProPlan = document.getElementById('btn-pro-plan');
   if (btnProPlan) {
     btnProPlan.addEventListener('click', () => {
-      window.location.href = 'signup/';
+      window.location.href = '/signup/';
     });
   }
 
   // Login / signup buttons
   const btnLogin  = document.getElementById('btn-login');
   const btnSignup = document.getElementById('btn-signup');
-  if (btnLogin)  btnLogin.addEventListener('click',  () => window.location.href = 'login/');
-  if (btnSignup) btnSignup.addEventListener('click', () => window.location.href = 'signup/');
+  if (btnLogin)  btnLogin.addEventListener('click',  () => window.location.href = '/login/');
+  if (btnSignup) btnSignup.addEventListener('click', () => window.location.href = '/signup/');
 }
 
 /* ================================================================

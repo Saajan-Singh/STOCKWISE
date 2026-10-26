@@ -321,7 +321,7 @@
         if (!res.ok) {
           var errorMsg = data.message || 'Registration failed';
           if (res.status === 400) {
-            var loginUrl = '../login/?email=' + encodeURIComponent(emailVal);
+            var loginUrl = '/login/?email=' + encodeURIComponent(emailVal);
             setError(
               emailInput,
               'work-email-error',
@@ -348,7 +348,7 @@
         showToast('Account created successfully! Redirecting...', 'success');
 
         setTimeout(function () {
-          window.location.href = '../dashboard/';
+          window.location.href = '/dashboard/';
         }, 1000);
 
         form.reset();

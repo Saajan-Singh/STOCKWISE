@@ -210,7 +210,7 @@
 
         showMessage('Clock in successful. Redirecting...', 'success');
         setTimeout(function () {
-          window.location.href = '../dashboard/';
+          window.location.href = '/dashboard/';
         }, 800);
       })
       .catch(function (networkErr) {

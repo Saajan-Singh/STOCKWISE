@@ -73,7 +73,7 @@
       } catch (err) {
         console.warn('[StockWise:dashboard] Could not clear session.', err);
       }
-      window.location.href = '../login/';
+      window.location.href = '/login/';
     });
   }
 
@@ -431,7 +431,7 @@
           console.warn('[StockWise:dashboard] Sync with backend encountered an issue:', syncErr);
           if (syncErr && syncErr.status === 401) {
             localStorage.removeItem('token');
-            window.location.href = '../login/';
+            window.location.href = '/login/';
             return;
           }
         }
