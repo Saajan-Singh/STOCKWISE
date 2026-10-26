@@ -1,12 +1,36 @@
-/**
- * Authentication Middleware Placeholder
- * Future purpose: Verify JSON Web Tokens (JWT) from the Authorization header
- * and attach the authenticated user payload to req.user.
- */
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-const auth = (req, res, next) => {
-  // Placeholder: No real authentication logic yet
-  next();
+const protect = async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      req.user = await User.findById(decoded.id).select('-password');
+
+      if (!req.user) {
+        return res.status(401).json({ message: 'Not authorized, user not found' });
+      }
+
+      return next();
+    } catch (error) {
+      return res.status(401).json({
+        message: 'Not authorized, token failed',
+        error: error.message
+      });
+    }
+  }
+
+  if (!token) {
+    return res.status(401).json({ message: 'Not authorized, no token provided' });
+  }
 };
 
-module.exports = auth;
+module.exports = protect;
+module.exports.protect = protect;

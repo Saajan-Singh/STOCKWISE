@@ -39,6 +39,18 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+// Health Check Endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+// Root Route for Render
+app.get('/', (req, res) => {
+  res.send('StockWise API is running on Render');
+});
+
+// Mount Routes
+const authRoutes = require('./routes/authRoutes');
 // Mount Routes
 const authRoutes = require('./routes/authRoutes');
 const itemRoutes = require('./routes/itemRoutes');
