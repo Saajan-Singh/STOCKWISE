@@ -1,9 +1,8 @@
-/**
- * Auth Routes Placeholder
- * Future purpose: Route definitions for authentication endpoints (/api/auth/register, /api/auth/login, etc.).
- */
-
 const express = require('express');
 const router = express.Router();
+const { registerUser, loginUser } = require('../controllers/authController');
+
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 
 module.exports = router;
