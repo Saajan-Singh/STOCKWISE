@@ -1,10 +1,11 @@
 {
   "cleanUrls": true,
   "trailingSlash": true,
-  "rewrites": [
+  "redirects": [
     {
       "source": "/",
-      "destination": "/landing-page/index.html"
+      "destination": "/landing-page/",
+      "permanent": true
     }
   ]
 }
