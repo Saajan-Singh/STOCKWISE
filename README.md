@@ -28,10 +28,12 @@ Both problems come from the same root cause: guessing instead of calculating. Mo
 
 StockWise brings real demand-based reorder logic down to a scale a small business can actually use.
 
-Who This Is For:
+Who This Is For
+
 Small business owners currently tracking stock manually — in their head or in a spreadsheet — who only discover they're out of something when a customer asks for it. Examples: retail and apparel shops, cafés, auto parts counters, small e-commerce sellers managing their own fulfillment.
 
-How It Works:
+How It Works
+
 Add your items — name, SKU, starting stock, supplier lead time, and a safety stock buffer.
 Log your sales as they happen — quantity and date.
 StockWise calculates, per item:
