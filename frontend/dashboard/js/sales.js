@@ -1,8 +1,8 @@
 /**
  * StockWise — sales.js
  * ====================
- * Sales entry logic.  All storage reads/writes go through Storage
- * (storage.js).  This module validates input and delegates persistence.
+ * Sales entry logic. Delegates persistence and inventory decrement
+ * to Storage (storage.js) and the live backend API.
  *
  * Exports: Sales namespace
  */
@@ -13,19 +13,10 @@ var Sales = (function () {
   /* ----------------------------------------------------------------
      logSale(itemId, quantity, date)
      ----------------------------------------------------------------
-     Validates that:
-       - quantity is a positive number
-       - date is not in the future and is a valid YYYY-MM-DD string
-     Then calls Storage.addSale() (which already handles decrementing
-     currentStock — we do NOT duplicate that decrement here).
-
-     @param {string} itemId
-     @param {number|string} quantity
-     @param {string} date  — "YYYY-MM-DD"
-
-     @returns {{ ok: boolean, sale?: SaleRecord, error?: string }}
+     Validates input, then calls Storage.addSale() to persist the
+     record to the backend and decrement stock.
      ---------------------------------------------------------------- */
-  function logSale(itemId, quantity, date) {
+  async function logSale(itemId, quantity, date) {
 
     /* ── 1. Validate itemId ── */
     if (!itemId) {
@@ -67,14 +58,18 @@ var Sales = (function () {
       return { ok: false, error: 'Sale date cannot be in the future.' };
     }
 
-    /* ── 4. Persist via Storage ── */
-    var sale = Storage.addSale({
-      itemId:       itemId,
-      quantitySold: qty,
-      date:         date
-    });
+    /* ── 4. Persist via Storage API ── */
+    try {
+      var sale = await Storage.addSale({
+        itemId:       itemId,
+        quantitySold: qty,
+        date:         date
+      });
 
-    return { ok: true, sale: sale };
+      return { ok: true, sale: sale };
+    } catch (err) {
+      return { ok: false, error: err.message || 'Failed to log sale on server.' };
+    }
   }
 
   /* ----------------------------------------------------------------

@@ -1,151 +1,99 @@
 /**
  * StockWise — storage.js
  * ======================
- * THE ONLY file in this codebase that is permitted to call
- * localStorage.getItem() or localStorage.setItem() directly.
- *
- * Every other module (items.js, sales.js, dashboard.js, app.js,
- * forecast.js) must go through the functions exported here.
- *
- * Design contract
- * ---------------
- * • Never throw — every public function that reads from localStorage
- *   wraps JSON.parse() in a try/catch and falls back to a safe empty
- *   value so the rest of the app never encounters undefined or an
- *   exception from a missing/corrupted key.
- * • Never write an id of undefined — addItem() and addSale() always
- *   auto-generate an id when the caller omits one.
- * • Sale logging and stock decrementing are atomic inside addSale()
- *   so the two stores can never drift out of sync.
- *
- * localStorage keys
- * -----------------
- *   "inventory_items"  →  InventoryItem[]
- *   "sales_log"        →  SaleRecord[]
- *
- * ----------------------------------------------------------------
- * DATA SHAPES
- * ----------------------------------------------------------------
- *
- * InventoryItem {
- *   id:            string        // "itm_<timestamp>_<random>"
- *   name:          string
- *   sku:           string
- *   currentStock:  number
- *   leadTimeDays:  number
- *   safetyStock:   number
- *   reorderQty:    number
- *   createdAt:     ISOString
- * }
- *
- * SaleRecord {
- *   id:             string       // "sale_<timestamp>_<random>"
- *   itemId:         string       // references an InventoryItem.id
- *   quantitySold:   number
- *   date:           "YYYY-MM-DD" // plain date — no time component to
- *                                // avoid timezone shift bugs
- * }
+ * Central data access layer for StockWise.
+ * Connects to live backend API (https://stockwise-133m.onrender.com)
+ * with localStorage caching for high performance and offline resilience.
  */
+
+var BASE_URL = typeof API_BASE_URL !== 'undefined'
+  ? API_BASE_URL
+  : (window.API_BASE_URL || 'https://stockwise-133m.onrender.com');
 
 /* ================================================================
    INTERNAL CONSTANTS
    ================================================================ */
-
-/** @type {string} */
 var ITEMS_KEY = 'inventory_items';
-
-/** @type {string} */
 var SALES_KEY = 'sales_log';
-
-/** @type {string} */
 var USERS_KEY = 'registered_users';
 
 /* ================================================================
    INTERNAL HELPERS
    ================================================================ */
-
-/**
- * Generate a short alphanumeric suffix (6 chars) to make IDs
- * unique even when multiple records are created within the same
- * millisecond (e.g. bulk imports, tests).
- *
- * @returns {string}
- */
 function randomSuffix() {
   return Math.random().toString(36).slice(2, 8);
 }
 
-/**
- * Generate an InventoryItem id.
- * Format: "itm_<timestamp>_<6-char random>"
- *
- * @returns {string}
- */
 function generateItemId() {
   return 'itm_' + Date.now() + '_' + randomSuffix();
 }
 
-/**
- * Generate a SaleRecord id.
- * Format: "sale_<timestamp>_<6-char random>"
- *
- * @returns {string}
- */
 function generateSaleId() {
   return 'sale_' + Date.now() + '_' + randomSuffix();
 }
 
-/**
- * Safely parse a JSON string stored in localStorage.
- * Returns `fallback` (default []) when:
- *   • the key doesn't exist (getItem returns null)
- *   • the stored value is not valid JSON
- *   • the parsed value is not an Array (guards against scalar corruption)
- *
- * @param {string} key
- * @param {*} [fallback=[]]
- * @returns {Array}
- */
+function getAuthHeaders() {
+  var token = localStorage.getItem('token');
+  var headers = {
+    'Content-Type': 'application/json'
+  };
+  if (token) {
+    headers['Authorization'] = 'Bearer ' + token;
+  }
+  return headers;
+}
+
+function normalizeItem(raw) {
+  if (!raw) return null;
+  return {
+    id: raw._id || raw.id,
+    _id: raw._id || raw.id,
+    name: raw.name || '',
+    sku: raw.sku || '',
+    currentStock: Number(raw.currentStock) || 0,
+    leadTimeDays: Number(raw.leadTimeDays) || 0,
+    safetyStock: Number(raw.safetyStock) || 0,
+    reorderQty: Number(raw.reorderQty) || 0,
+    createdAt: raw.createdAt || new Date().toISOString()
+  };
+}
+
+function normalizeSale(raw) {
+  if (!raw) return null;
+  var itemId = '';
+  if (raw.item) {
+    itemId = typeof raw.item === 'object' ? (raw.item._id || raw.item.id) : raw.item;
+  } else if (raw.itemId) {
+    itemId = raw.itemId;
+  }
+  return {
+    id: raw._id || raw.id,
+    _id: raw._id || raw.id,
+    itemId: itemId,
+    item: raw.item,
+    quantitySold: Number(raw.quantitySold) || 0,
+    date: raw.date || ''
+  };
+}
+
 function safeRead(key, fallback) {
   if (fallback === undefined) fallback = [];
   try {
     var raw = localStorage.getItem(key);
     if (raw === null) return fallback;
     var parsed = JSON.parse(raw);
-    /* Guard: if somehow a non-array was stored, return fallback */
-    if (!Array.isArray(parsed)) {
-      console.warn(
-        '[StockWise:storage] Key "' + key + '" did not contain an array. ' +
-        'Discarding corrupted value and returning empty array.'
-      );
-      return fallback;
-    }
+    if (!Array.isArray(parsed)) return fallback;
     return parsed;
   } catch (err) {
-    console.warn(
-      '[StockWise:storage] JSON.parse failed for key "' + key + '". ' +
-      'Discarding corrupted value and returning empty array.',
-      err
-    );
     return fallback;
   }
 }
 
-/**
- * Safely stringify and write an array to localStorage.
- *
- * @param {string} key
- * @param {Array} arr
- */
 function safeWrite(key, arr) {
   try {
     localStorage.setItem(key, JSON.stringify(arr));
   } catch (err) {
-    /* Can happen if storage is full (QuotaExceededError) */
-    console.error(
-      '[StockWise:storage] Could not write to localStorage key "' + key + '".',
-      err
-    );
+    console.error('[StockWise:storage] Could not write to localStorage key "' + key + '".', err);
   }
 }
 
@@ -153,113 +101,129 @@ function safeWrite(key, arr) {
    INVENTORY ITEMS API
    ================================================================ */
 
-/**
- * Return the full inventory_items array.
- * Always returns an Array (never undefined, never throws).
- *
- * @returns {InventoryItem[]}
- */
 function getItems() {
   return safeRead(ITEMS_KEY);
 }
 
-/**
- * Overwrite the entire inventory_items array in localStorage.
- * Use this only when you already hold the full mutated array.
- * Prefer addItem() / updateItem() / deleteItem() for normal ops.
- *
- * @param {InventoryItem[]} items
- */
 function saveItems(items) {
   safeWrite(ITEMS_KEY, items);
 }
 
-/**
- * Add a new inventory item.
- * Auto-generates `id` and `createdAt` if not already present on
- * the passed object — callers should generally omit both.
- *
- * @param {Partial<InventoryItem>} item
- * @returns {InventoryItem} The saved item including its generated id.
- */
-function addItem(item) {
-  var items = getItems();
+async function fetchItems() {
+  var token = localStorage.getItem('token');
+  if (!token) return getItems();
 
-  /* Build a complete record, generating any missing system fields */
-  var newItem = Object.assign({}, item, {
-    id:        item.id        || generateItemId(),
-    createdAt: item.createdAt || new Date().toISOString()
-  });
+  try {
+    var res = await fetch(BASE_URL + '/api/items', {
+      method: 'GET',
+      headers: getAuthHeaders()
+    });
 
-  items.push(newItem);
-  saveItems(items);
+    if (res.status === 401) {
+      console.warn('[StockWise:storage] 401 Unauthorized fetching items.');
+      throw { status: 401, message: 'Session expired. Please log in again.' };
+    }
 
-  return newItem;
+    if (!res.ok) {
+      var errData = {};
+      try { errData = await res.json(); } catch (e) {}
+      throw { status: res.status, message: errData.message || ('Server error (' + res.status + ')') };
+    }
+
+    var data = await res.json();
+    var normalized = Array.isArray(data) ? data.map(normalizeItem) : [];
+    saveItems(normalized);
+    return normalized;
+  } catch (err) {
+    console.error('[StockWise:storage] fetchItems error:', err);
+    throw err;
+  }
 }
 
-/**
- * Update an existing item by id.
- * Merges `updatedFields` into the matching record (shallow merge).
- * Does NOT allow the caller to overwrite `id` or `createdAt` via
- * updatedFields — those are immutable after creation.
- *
- * @param {string} itemId
- * @param {Partial<InventoryItem>} updatedFields
- * @returns {InventoryItem|null} The updated item, or null if not found.
- */
+async function addItem(item) {
+  var token = localStorage.getItem('token');
+
+  if (token) {
+    var res = await fetch(BASE_URL + '/api/items', {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        name: item.name,
+        sku: item.sku,
+        currentStock: Number(item.currentStock) || 0,
+        leadTimeDays: Number(item.leadTimeDays) || 0,
+        safetyStock: Number(item.safetyStock) || 0,
+        reorderQty: Number(item.reorderQty) || 0
+      })
+    });
+
+    var data = {};
+    try { data = await res.json(); } catch (e) {}
+
+    if (!res.ok) {
+      var msg = data.message || ('Failed to create item (' + res.status + ')');
+      throw new Error(msg);
+    }
+
+    var newItem = normalizeItem(data);
+    var items = getItems();
+    items.unshift(newItem);
+    saveItems(items);
+    return newItem;
+  }
+
+  // Fallback for offline/local
+  var items = getItems();
+  var localItem = Object.assign({}, item, {
+    id: item.id || generateItemId(),
+    createdAt: item.createdAt || new Date().toISOString()
+  });
+  items.push(localItem);
+  saveItems(items);
+  return localItem;
+}
+
 function updateItem(itemId, updatedFields) {
   var items = getItems();
   var index = -1;
 
   for (var i = 0; i < items.length; i++) {
-    if (items[i].id === itemId) {
+    if (items[i].id === itemId || items[i]._id === itemId) {
       index = i;
       break;
     }
   }
 
-  if (index === -1) {
-    console.warn('[StockWise:storage] updateItem — no item found with id "' + itemId + '".');
-    return null;
-  }
+  if (index === -1) return null;
 
-  /* Merge, but protect immutable fields */
   var merged = Object.assign({}, items[index], updatedFields, {
-    id:        items[index].id,
+    id: items[index].id,
     createdAt: items[index].createdAt
   });
 
   items[index] = merged;
   saveItems(items);
-
   return merged;
 }
 
-/**
- * Delete an item by id.
- *
- * NOTE: The matching item's sales history in `sales_log` is
- * intentionally preserved. Historical sale records are valuable
- * for trend analysis even after an item is retired. If you need
- * to wipe sales for a deleted item, call getSalesForItem() and
- * saveSales() separately and explicitly.
- *
- * @param {string} itemId
- * @returns {boolean} true if an item was removed, false if not found.
- */
-function deleteItem(itemId) {
-  var items = getItems();
-  var originalLength = items.length;
+async function deleteItem(itemId) {
+  var token = localStorage.getItem('token');
 
-  var filtered = items.filter(function (it) {
-    return it.id !== itemId;
-  });
-
-  if (filtered.length === originalLength) {
-    console.warn('[StockWise:storage] deleteItem — no item found with id "' + itemId + '".');
-    return false;
+  if (token) {
+    try {
+      await fetch(BASE_URL + '/api/items/' + itemId, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+    } catch (err) {
+      console.warn('[StockWise:storage] remote delete failed:', err);
+    }
   }
 
+  var items = getItems();
+  var filtered = items.filter(function (it) {
+    return it.id !== itemId && it._id !== itemId;
+  });
   saveItems(filtered);
   return true;
 }
@@ -268,211 +232,185 @@ function deleteItem(itemId) {
    SALES LOG API
    ================================================================ */
 
-/**
- * Return the full sales_log array.
- * Always returns an Array (never undefined, never throws).
- *
- * @returns {SaleRecord[]}
- */
 function getSales() {
   return safeRead(SALES_KEY);
 }
 
-/**
- * Overwrite the entire sales_log array in localStorage.
- * Prefer addSale() for normal logging; use this only when you hold
- * the full mutated array (e.g. bulk migration).
- *
- * @param {SaleRecord[]} sales
- */
 function saveSales(sales) {
   safeWrite(SALES_KEY, sales);
 }
 
-/**
- * Log a new sale AND decrement the matching item's currentStock.
- *
- * These two side-effects happen inside a single function call to
- * ensure they are always in sync — you can never log a sale without
- * decrementing stock, and you can never decrement stock without a
- * matching sale record.
- *
- * Edge-case: if `sale.itemId` doesn't match any existing item, the
- * sale record is still saved (for audit purposes) but stock is NOT
- * decremented and a console warning is emitted.
- *
- * The `date` field should be supplied by the caller as "YYYY-MM-DD".
- * If omitted, today's local date is used (no time, no timezone shift).
- *
- * @param {Partial<SaleRecord>} sale
- * @returns {SaleRecord} The saved sale record including its generated id.
- */
-function addSale(sale) {
-  /* ── 1. Build and persist the sale record ── */
+async function fetchSales() {
+  var token = localStorage.getItem('token');
+  if (!token) return getSales();
+
+  try {
+    var res = await fetch(BASE_URL + '/api/sales', {
+      method: 'GET',
+      headers: getAuthHeaders()
+    });
+
+    if (res.status === 401) {
+      throw { status: 401, message: 'Session expired. Please log in again.' };
+    }
+
+    if (!res.ok) {
+      var errData = {};
+      try { errData = await res.json(); } catch (e) {}
+      throw { status: res.status, message: errData.message || ('Server error (' + res.status + ')') };
+    }
+
+    var data = await res.json();
+    var normalized = Array.isArray(data) ? data.map(normalizeSale) : [];
+    saveSales(normalized);
+    return normalized;
+  } catch (err) {
+    console.error('[StockWise:storage] fetchSales error:', err);
+    throw err;
+  }
+}
+
+async function addSale(sale) {
+  var token = localStorage.getItem('token');
+
+  if (token) {
+    var res = await fetch(BASE_URL + '/api/sales', {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        itemId: sale.itemId,
+        quantitySold: Number(sale.quantitySold) || 0,
+        date: sale.date || todayDateString()
+      })
+    });
+
+    var data = {};
+    try { data = await res.json(); } catch (e) {}
+
+    if (!res.ok) {
+      var msg = data.message || ('Failed to log sale (' + res.status + ')');
+      throw new Error(msg);
+    }
+
+    var createdSale = normalizeSale(data.sale || data);
+    var sales = getSales();
+    sales.unshift(createdSale);
+    saveSales(sales);
+
+    if (data.remainingStock !== undefined) {
+      var items = getItems();
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].id === createdSale.itemId || items[i]._id === createdSale.itemId) {
+          items[i].currentStock = data.remainingStock;
+          break;
+        }
+      }
+      saveItems(items);
+    }
+
+    return createdSale;
+  }
+
+  // Fallback
   var newSale = Object.assign({}, sale, {
-    id:   sale.id   || generateSaleId(),
+    id: sale.id || generateSaleId(),
     date: sale.date || todayDateString()
   });
 
-  var sales = getSales();
-  sales.push(newSale);
-  saveSales(sales);
+  var salesList = getSales();
+  salesList.push(newSale);
+  saveSales(salesList);
 
-  /* ── 2. Decrement the matching item's stock ── */
-  var items = getItems();
-  var matchIndex = -1;
-
-  for (var i = 0; i < items.length; i++) {
-    if (items[i].id === newSale.itemId) {
-      matchIndex = i;
+  var itemsList = getItems();
+  for (var j = 0; j < itemsList.length; j++) {
+    if (itemsList[j].id === newSale.itemId || itemsList[j]._id === newSale.itemId) {
+      var curr = Number(itemsList[j].currentStock) || 0;
+      var q = Number(newSale.quantitySold) || 0;
+      updateItem(newSale.itemId, { currentStock: Math.max(0, curr - q) });
       break;
     }
-  }
-
-  if (matchIndex === -1) {
-    console.warn(
-      '[StockWise:storage] addSale — no item found with id "' + newSale.itemId + '". ' +
-      'Sale record saved but stock was NOT decremented.'
-    );
-  } else {
-    var currentStock = Number(items[matchIndex].currentStock) || 0;
-    var qty          = Number(newSale.quantitySold)           || 0;
-    updateItem(newSale.itemId, {
-      currentStock: currentStock - qty
-    });
   }
 
   return newSale;
 }
 
-/**
- * Return only the sale records that belong to a specific item.
- * Used heavily by forecast.js to compute average daily demand.
- *
- * @param {string} itemId
- * @returns {SaleRecord[]}
- */
 function getSalesForItem(itemId) {
   return getSales().filter(function (sale) {
-    return sale.itemId === itemId;
+    return sale.itemId === itemId || (sale.item && (sale.item._id === itemId || sale.item.id === itemId));
   });
 }
 
 /* ================================================================
-   USERS API (Phase 1 Auth Placeholder)
+   USERS API (Compatibility Stand-in)
    ================================================================ */
-
-/**
- * Return the full registered_users array.
- * Always returns an Array (never undefined, never throws).
- *
- * @returns {User[]}
- */
 function getUsers() {
   return safeRead(USERS_KEY);
 }
 
-/**
- * Overwrite the entire registered_users array in localStorage.
- *
- * @param {User[]} users
- */
 function saveUsers(users) {
   safeWrite(USERS_KEY, users);
 }
 
-/**
- * Find a user by their email address (case-insensitive).
- *
- * @param {string} email
- * @returns {User|null}
- */
 function findUserByEmail(email) {
   var users = getUsers();
-  var lowerEmail = email.toLowerCase();
+  var lowerEmail = (email || '').toLowerCase();
   for (var i = 0; i < users.length; i++) {
-    if (users[i].email.toLowerCase() === lowerEmail) {
+    if ((users[i].email || '').toLowerCase() === lowerEmail) {
       return users[i];
     }
   }
   return null;
 }
 
-/**
- * Add a new user to the registered_users array.
- * Note: storing plaintext passwords in localStorage is NOT secure and is only
- * acceptable as a temporary Phase 1 placeholder — real authentication
- * (hashed passwords, real backend, sessions) will be built in Phase 2.
- *
- * @param {Partial<User>} user
- * @returns {User} The saved user including its generated id.
- */
 function addUser(user) {
   var users = getUsers();
-
   var newUser = Object.assign({}, user, {
-    id:        user.id        || 'usr_' + Date.now() + '_' + randomSuffix(),
+    id: user.id || 'usr_' + Date.now() + '_' + randomSuffix(),
     createdAt: user.createdAt || new Date().toISOString()
   });
-
   users.push(newUser);
   saveUsers(users);
-
   return newUser;
 }
 
 /* ================================================================
    UTILITY — LOCAL DATE STRING
    ================================================================ */
-
-/**
- * Return today's date as "YYYY-MM-DD" in the browser's LOCAL timezone.
- * Using toISOString() would give a UTC date which can differ from the
- * user's local date near midnight — this helper avoids that bug.
- *
- * @returns {string} e.g. "2026-08-20"
- */
 function todayDateString() {
-  var d   = new Date();
-  var yr  = d.getFullYear();
-  var mo  = String(d.getMonth() + 1).padStart(2, '0');
+  var d = new Date();
+  var yr = d.getFullYear();
+  var mo = String(d.getMonth() + 1).padStart(2, '0');
   var day = String(d.getDate()).padStart(2, '0');
   return yr + '-' + mo + '-' + day;
 }
 
 /* ================================================================
    NAMESPACE EXPORT
-   ================================================================
-   Because this project must run via file:// (no bundler, no server),
-   we cannot use ES6 `export`. Instead we attach everything to a
-   single global namespace object — Storage — so every other module
-   can call  Storage.getItems(), Storage.addSale(), etc.
    ================================================================ */
-
 var Storage = {
   /* Items */
-  getItems:   getItems,
-  saveItems:  saveItems,
-  addItem:    addItem,
+  getItems: getItems,
+  fetchItems: fetchItems,
+  saveItems: saveItems,
+  addItem: addItem,
   updateItem: updateItem,
   deleteItem: deleteItem,
 
   /* Sales */
-  getSales:        getSales,
-  saveSales:       saveSales,
-  addSale:         addSale,
+  getSales: getSales,
+  fetchSales: fetchSales,
+  saveSales: saveSales,
+  addSale: addSale,
   getSalesForItem: getSalesForItem,
 
   /* Users */
-  getUsers:        getUsers,
-  saveUsers:       saveUsers,
+  getUsers: getUsers,
+  saveUsers: saveUsers,
   findUserByEmail: findUserByEmail,
-  addUser:         addUser,
+  addUser: addUser,
 
   /* Utility */
   todayDateString: todayDateString
 };
 
-/* Freeze the namespace so no other module can accidentally overwrite
-   a method (e.g. Storage.getItems = something_else). */
 if (Object.freeze) Object.freeze(Storage);

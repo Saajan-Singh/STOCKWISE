@@ -1,8 +1,8 @@
 /**
  * StockWise — items.js
  * ====================
- * Item CRUD logic.  All storage reads/writes go through Storage
- * (storage.js).  This module validates input and delegates persistence.
+ * Item CRUD logic. Delegates persistence and API communication
+ * to Storage (storage.js).
  *
  * Exports: Items namespace
  */
@@ -13,20 +13,10 @@ var Items = (function () {
   /* ----------------------------------------------------------------
      createItem(formData)
      ----------------------------------------------------------------
-     Validates required fields, builds the item object, calls
-     Storage.addItem(), and returns the created item.
-
-     @param {Object} formData
-       - name          {string}  required
-       - sku           {string}  required
-       - currentStock  {number}  required, ≥ 0
-       - leadTimeDays  {number}  required, ≥ 0
-       - safetyStock   {number}  required, ≥ 0
-       - reorderQty    {number}  optional, defaults to 0
-
-     @returns {{ ok: boolean, item?: InventoryItem, error?: string }}
+     Validates required fields, calls Storage.addItem(), and returns
+     the created item or an error message.
      ---------------------------------------------------------------- */
-  function createItem(formData) {
+  async function createItem(formData) {
 
     /* ── 1. Validate name ── */
     var name = (formData.name || '').trim();
@@ -70,17 +60,21 @@ var Items = (function () {
     /* ── 6. reorderQty (optional) ── */
     var reorderQty = Number(formData.reorderQty) || 0;
 
-    /* ── 7. Build and persist ── */
-    var item = Storage.addItem({
-      name:         name,
-      sku:          sku,
-      currentStock: currentStock,
-      leadTimeDays: leadTimeDays,
-      safetyStock:  safetyStock,
-      reorderQty:   reorderQty
-    });
+    /* ── 7. Build and persist via Storage API ── */
+    try {
+      var item = await Storage.addItem({
+        name:         name,
+        sku:          sku,
+        currentStock: currentStock,
+        leadTimeDays: leadTimeDays,
+        safetyStock:  safetyStock,
+        reorderQty:   reorderQty
+      });
 
-    return { ok: true, item: item };
+      return { ok: true, item: item };
+    } catch (err) {
+      return { ok: false, error: err.message || 'Failed to save item to server.' };
+    }
   }
 
   /* ----------------------------------------------------------------

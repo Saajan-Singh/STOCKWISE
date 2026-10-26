@@ -157,50 +157,68 @@
       remember: rememberBox.checked
     };
 
-    /* Check user against Storage (Phase 1 Auth) */
-    var user = null;
-    if (window.Storage) {
-      user = Storage.findUserByEmail(formData.email);
-      if (!user) {
-        setError(emailInput, 'email-error', 'No account found with this email. Try signing up instead.');
-        emailInput.focus();
-        return;
-      }
-      if (user.password !== formData.password) {
-        setError(passwordInput, 'password-error', 'Incorrect password. Please try again.');
-        passwordInput.focus();
-        return;
-      }
-      
-      try {
-        localStorage.setItem('loggedInOwnerName', user.fullName);
-        localStorage.setItem('loggedInBusinessName', user.businessName);
-      } catch (lsErr) {
-        console.warn('[StockWise:login] Could not write session to localStorage.', lsErr);
-      }
-    }
-
-    console.log('[StockWise] Login form submitted:', {
-      email:    formData.email,
-      remember: formData.remember,
-      /* password intentionally omitted from log */
-    });
-
-    /* Simulate async check */
+    /* Authenticate against live API */
     submitBtn.classList.add('loading');
     submitBtn.setAttribute('disabled', 'true');
 
-    setTimeout(function () {
-      submitBtn.classList.remove('loading');
-      submitBtn.removeAttribute('disabled');
+    var apiUrl = (typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : (window.API_BASE_URL || 'https://stockwise-133m.onrender.com')) + '/api/auth/login';
 
-      console.log('[StockWise] Remember this device:', formData.remember);
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password
+      })
+    })
+      .then(async function (res) {
+        submitBtn.classList.remove('loading');
+        submitBtn.removeAttribute('disabled');
 
-      showMessage('Clock in successful. Redirecting...', 'success');
-      setTimeout(function() {
-        window.location.href = '../dashboard/';
-      }, 800);
-    }, 900);
+        var data = {};
+        try {
+          data = await res.json();
+        } catch (jsonErr) {}
+
+        if (!res.ok) {
+          var errorMsg = data.message || 'Login failed';
+          if (res.status === 400 || res.status === 401) {
+            setError(passwordInput, 'password-error', errorMsg);
+            showMessage(errorMsg, 'error');
+            passwordInput.focus();
+          } else if (res.status === 500) {
+            showMessage('Server error (500). Please try again later.', 'error');
+          } else {
+            showMessage(errorMsg + ' (' + res.status + ')', 'error');
+          }
+          return;
+        }
+
+        /* ── Successful Login (200) ── */
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
+        if (data.name) {
+          localStorage.setItem('loggedInOwnerName', data.name);
+        }
+        var existingBiz = localStorage.getItem('loggedInBusinessName');
+        if (!existingBiz) {
+          localStorage.setItem('loggedInBusinessName', (data.name || 'StockWise') + ' Warehouse');
+        }
+
+        showMessage('Clock in successful. Redirecting...', 'success');
+        setTimeout(function () {
+          window.location.href = '../dashboard/';
+        }, 800);
+      })
+      .catch(function (networkErr) {
+        submitBtn.classList.remove('loading');
+        submitBtn.removeAttribute('disabled');
+        console.error('[StockWise:login] Network error:', networkErr);
+        showMessage('Unable to reach authentication server. Check your connection.', 'error');
+      });
   });
 
   /* ----------------------------------------------------------------

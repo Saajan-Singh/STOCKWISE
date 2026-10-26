@@ -288,63 +288,83 @@
     }
 
     var emailVal = emailInput.value.trim();
-    if (window.Storage && Storage.findUserByEmail(emailVal)) {
-      var loginUrl = '../login/?email=' + encodeURIComponent(emailVal);
-      setError(
-        emailInput,
-        'work-email-error',
-        'An account with this email already exists. <a href="' + loginUrl + '" style="text-decoration: underline; color: inherit;">Log In Instead</a>',
-        true
-      );
-      emailInput.focus();
-      return;
-    }
+    var fullNameVal = fullNameInput.value.trim();
+    var bizNameVal = bizNameInput.value.trim();
+    var passwordVal = passwordInput.value;
 
-    /* Simulate async submission */
+    /* Execute live registration against API */
     submitBtn.classList.add('loading');
     submitBtn.setAttribute('disabled', 'true');
 
-    setTimeout(function () {
-      submitBtn.classList.remove('loading');
-      submitBtn.removeAttribute('disabled');
+    var apiUrl = (typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : (window.API_BASE_URL || 'https://stockwise-133m.onrender.com')) + '/api/auth/register';
 
-      /* ── Temporary Phase-1 session stand-in ────────────────────── */
-      if (window.Storage) {
-        Storage.addUser({
-          fullName: fullNameInput.value.trim(),
-          businessName: bizNameInput.value.trim(),
-          email: emailVal,
-          password: passwordInput.value
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: fullNameVal,
+        email: emailVal,
+        password: passwordVal
+      })
+    })
+      .then(async function (res) {
+        submitBtn.classList.remove('loading');
+        submitBtn.removeAttribute('disabled');
+
+        var data = {};
+        try {
+          data = await res.json();
+        } catch (jsonErr) {}
+
+        if (!res.ok) {
+          var errorMsg = data.message || 'Registration failed';
+          if (res.status === 400) {
+            var loginUrl = '../login/?email=' + encodeURIComponent(emailVal);
+            setError(
+              emailInput,
+              'work-email-error',
+              errorMsg + '. <a href="' + loginUrl + '" style="text-decoration: underline; color: inherit;">Log In Instead</a>',
+              true
+            );
+            showToast(errorMsg, 'error');
+            emailInput.focus();
+          } else if (res.status === 500) {
+            showToast('Server error (500). Please try again later.', 'error');
+          } else {
+            showToast(errorMsg + ' (' + res.status + ')', 'error');
+          }
+          return;
+        }
+
+        /* ── Successful Registration (201) ── */
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
+        localStorage.setItem('loggedInOwnerName', data.name || fullNameVal);
+        localStorage.setItem('loggedInBusinessName', bizNameVal || 'My Warehouse');
+
+        showToast('Account created successfully! Redirecting...', 'success');
+
+        setTimeout(function () {
+          window.location.href = '../dashboard/';
+        }, 1000);
+
+        form.reset();
+        var allInputs = form.querySelectorAll('.field-input');
+        allInputs.forEach(function (el) {
+          el.classList.remove('is-valid', 'is-invalid');
+          delete el.dataset.touched;
         });
-      }
-
-      try {
-        localStorage.setItem('loggedInOwnerName',    fullNameInput.value.trim());
-        localStorage.setItem('loggedInBusinessName', bizNameInput.value.trim());
-      } catch (lsErr) {
-        console.warn('[StockWise:signup] Could not write session to localStorage.', lsErr);
-      }
-
-      /* In a real app this would POST to the server.
-         For now, show success and redirect. */
-      showToast('Access request submitted! Redirecting...', 'success');
-      
-      setTimeout(function() {
-        window.location.href = '../dashboard/';
-      }, 1200);
-
-      form.reset();
-
-      /* Clear valid indicators */
-      var allInputs = form.querySelectorAll('.field-input');
-      allInputs.forEach(function (el) {
-        el.classList.remove('is-valid', 'is-invalid');
-        delete el.dataset.touched;
+        updateStrengthMeter('');
+      })
+      .catch(function (networkErr) {
+        submitBtn.classList.remove('loading');
+        submitBtn.removeAttribute('disabled');
+        console.error('[StockWise:signup] Network error:', networkErr);
+        showToast('Unable to reach registration server. Check your connection.', 'error');
       });
-
-      /* Reset strength meter */
-      updateStrengthMeter('');
-    }, 1400);
   });
 
   /* ----------------------------------------------------------------

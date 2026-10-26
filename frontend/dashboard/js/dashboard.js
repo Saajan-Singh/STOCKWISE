@@ -27,7 +27,9 @@
   var ownerName = '';
   var bizName   = '';
 
+  var token = '';
   try {
+    token     = localStorage.getItem('token') || '';
     ownerName = localStorage.getItem(KEY_OWNER_NAME) || '';
     bizName   = localStorage.getItem(KEY_BIZ_NAME)   || '';
   } catch (err) {
@@ -35,24 +37,24 @@
   }
 
   /* ── DOM: session-dependent elements ── */
-  // var welcomeSection   = document.getElementById('welcome-section'); // Removed
   var noSessionSection = document.getElementById('no-session-section');
   var welcomeHeading   = document.getElementById('welcome-heading');
   var welcomeBiz       = document.getElementById('welcome-biz');
   var navbarUserLabel  = document.getElementById('navbar-user-label');
   var dashboardContent = document.getElementById('dashboard-content');
 
-  if (ownerName && bizName) {
-    welcomeHeading.textContent = 'Welcome back, ' + ownerName;
-    welcomeBiz.textContent     = bizName + ' — Dashboard';
-    navbarUserLabel.textContent = ownerName;
-    // welcomeSection.classList.add('visible');
-    noSessionSection.classList.remove('visible');
+  var displayName = ownerName || (token ? 'Operator' : '');
+  var displayBiz  = bizName || (token ? 'Main Warehouse' : '');
+
+  if (token || (ownerName && bizName)) {
+    if (welcomeHeading) welcomeHeading.textContent = 'Welcome back, ' + displayName;
+    if (welcomeBiz) welcomeBiz.textContent     = displayBiz + ' — Dashboard';
+    if (navbarUserLabel) navbarUserLabel.textContent = displayName;
+    if (noSessionSection) noSessionSection.classList.remove('visible');
     if (dashboardContent) dashboardContent.style.display = '';
   } else {
-    // welcomeSection.classList.remove('visible');
-    noSessionSection.classList.add('visible');
-    navbarUserLabel.textContent = '';
+    if (noSessionSection) noSessionSection.classList.add('visible');
+    if (navbarUserLabel) navbarUserLabel.textContent = '';
     if (dashboardContent) dashboardContent.style.display = 'none';
   }
 
@@ -63,11 +65,15 @@
   if (btnLogout) {
     btnLogout.addEventListener('click', function () {
       try {
+        localStorage.removeItem('token');
         localStorage.removeItem(KEY_OWNER_NAME);
         localStorage.removeItem(KEY_BIZ_NAME);
+        localStorage.removeItem('inventory_items');
+        localStorage.removeItem('sales_log');
       } catch (err) {
         console.warn('[StockWise:dashboard] Could not clear session.', err);
       }
+      window.location.href = '../login/';
     });
   }
 
@@ -276,11 +282,17 @@
   }
 
   if (addItemForm) {
-    addItemForm.addEventListener('submit', function (e) {
+    addItemForm.addEventListener('submit', async function (e) {
       e.preventDefault();
       if (addItemError) addItemError.textContent = '';
 
-      var result = Items.createItem({
+      var submitBtn = addItemForm.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Saving...';
+      }
+
+      var result = await Items.createItem({
         name:         addItemForm.elements['item-name'].value,
         sku:          addItemForm.elements['item-sku'].value,
         currentStock: addItemForm.elements['item-stock'].value,
@@ -288,6 +300,11 @@
         safetyStock:  addItemForm.elements['item-safety'].value,
         reorderQty:   addItemForm.elements['item-reorder-qty'].value
       });
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">add</span> Add Item';
+      }
 
       if (!result.ok) {
         if (addItemError) addItemError.textContent = result.error;
@@ -318,7 +335,7 @@
 
     for (var i = 0; i < items.length; i++) {
       var opt = document.createElement('option');
-      opt.value = items[i].id;
+      opt.value = items[i].id || items[i]._id;
       opt.textContent = items[i].name + ' (' + items[i].sku + ')';
       logSaleSelect.appendChild(opt);
     }
@@ -343,15 +360,26 @@
   }
 
   if (logSaleForm) {
-    logSaleForm.addEventListener('submit', function (e) {
+    logSaleForm.addEventListener('submit', async function (e) {
       e.preventDefault();
       if (logSaleError) logSaleError.textContent = '';
 
-      var result = Sales.logSale(
+      var submitBtn = logSaleForm.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Logging...';
+      }
+
+      var result = await Sales.logSale(
         logSaleForm.elements['sale-item-id'].value,
         logSaleForm.elements['sale-qty'].value,
         logSaleForm.elements['sale-date'].value
       );
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">add_shopping_cart</span> Log Sale';
+      }
 
       if (!result.ok) {
         if (logSaleError) logSaleError.textContent = result.error;
@@ -389,10 +417,28 @@
   }
 
   /* ================================================================
-     INITIAL RENDER
+     INITIAL RENDER & BACKEND SYNC
      ================================================================ */
-  if (ownerName && bizName) {
-    renderAll();
+  async function initDashboard() {
+    if (token || (ownerName && bizName)) {
+      renderAll(); // Immediate render from local cache if available
+
+      if (token && typeof Storage.fetchItems === 'function') {
+        try {
+          await Promise.all([Storage.fetchItems(), Storage.fetchSales()]);
+          renderAll(); // Re-render with freshly synced backend data
+        } catch (syncErr) {
+          console.warn('[StockWise:dashboard] Sync with backend encountered an issue:', syncErr);
+          if (syncErr && syncErr.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '../login/';
+            return;
+          }
+        }
+      }
+    }
   }
+
+  initDashboard();
 
 })();
