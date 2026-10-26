@@ -1,0 +1,22 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/frontend/login/index.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/frontend/login/index.html"
+    },
+    {
+      "source": "/signup",
+      "destination": "/frontend/signup/index.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/frontend/dashboard/index.html"
+    }
+  ]
+}
