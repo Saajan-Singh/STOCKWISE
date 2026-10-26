@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <body>
-  <img id="btn" src="file:///C:/Users/saggu/.gemini/antigravity-ide/brain/1fdf003c-bd4b-4474-8035-3eede0aa0c8f/.user_uploaded/media_1787604961896.png" style="display:none;" onload="extractColor()">
+  <img id="btn"
+    src="file:///C:/Users/saggu/.gemini/antigravity-ide/brain/1fdf003c-bd4b-4474-8035-3eede0aa0c8f/.user_uploaded/media_1787604961896.png"
+    style="display:none;" onload="extractColor()">
   <canvas id="canvas" style="display:none;"></canvas>
   <div id="output"></div>
   <script>
@@ -12,13 +15,14 @@
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
-      
+
       // Get pixel data from roughly the center-left where the background should be solid
       const pixelData = ctx.getImageData(10, 10, 1, 1).data;
       const hex = "#" + (1 << 24 | pixelData[0] << 16 | pixelData[1] << 8 | pixelData[2]).toString(16).slice(1);
-      
+
       document.getElementById('output').innerText = hex;
     }
   </script>
 </body>
+
 </html>
